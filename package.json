@@ -1,0 +1,30 @@
+{
+  "name": "symbiflow-database-visualizer",
+  "version": "0.0.0",
+  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --progress",
+    "build": "webpack --output-path dist"
+  },
+  "dependencies": {
+    "@material/button": "^7.0.0",
+    "@material/tab-bar": "^7.0.0",
+    "chroma-js": "^2.1.0",
+    "expr-eval": "^2.0.2",
+    "lodash": "^4.17.20"
+  },
+  "devDependencies": {
+    "css-loader": "^4.3.0",
+    "dart-sass": "^1.25.0",
+    "extract-loader": "^5.1.0",
+    "file-loader": "^6.1.0",
+    "html-webpack-plugin": "^4.4.1",
+    "mini-css-extract-plugin": "^0.11.2",
+    "sass-loader": "^10.0.2",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

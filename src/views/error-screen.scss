@@ -1,0 +1,46 @@
+.error-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: #212121;
+    color: white;
+
+    &.type-user {
+        background-color: #5a2ab5;
+    }
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+
+    > * {
+        width: min(max(33%, 720px), calc(100vw - 32px));
+    }
+
+    h1 {
+        margin: -2em 0 1em 0;
+    }
+
+    p {
+        line-height: 1.5em;
+        margin: 0;
+    }
+
+    code {
+        border-radius: 2px;
+        padding: 0 1px;
+        margin: 0 -1px;
+        background-color: #0004;
+
+        samp {
+            font-style: italic;
+            font-weight: 700;
+        }
+    }
+}
