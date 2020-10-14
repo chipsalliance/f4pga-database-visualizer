@@ -9,9 +9,11 @@ import {readFileXHR, XHRError} from "./datasources/read-file-xhr";
 import {JsonReader} from "./datasources/json-reader";
 
 import AppParams from "./app-params";
+import AppConfig from "./app-config";
 import ErrorScreen from "./views/error-screen";
 
 import "./styles.scss";
+import DataFilesListScreen from "./views/data-files-list-screen";
 import {elementFromHtml} from "./utils/element-from-html";
 
 
@@ -184,7 +186,7 @@ async function tileClickEventHandler(event) {
         const sidePanelTabBar = mdc_tab_bars["side-panel-tab-bar"];
         sidePanelTabBar.mdc.activateTab(sidePanelTabBar.tabIndexes["side-panel-tile-tab"]);
     }
-    window.location.hash = encodeURIComponent(cellFullName);
+    history.replaceState(undefined, undefined, "#" + encodeURIComponent(cellFullName))
 }
 function tileDoubleClickEventHandler(event) {
     const tileElement = event.target;
@@ -427,16 +429,22 @@ async function updateGridCells(grid) {
 }
 
 async function loadData() {
+    const configReader = new JsonReader("./sdbv.config.json", {readFile: readFileXHR});
+    AppConfig.init(configReader);
+
     updateTitles();
 
-    if (!AppParams.databaseFile) {
-    let url = new URL(window.location);
-        new ErrorScreen({title: AppParams.appName, type: "user", message:
-            "Database file not specified. " +
-            "Append <code>dbfile=<samp>path/to/db.json</samp></code> parameter to the URL, like:</br>"
-            + `<code>${window.location.origin}${window.location.pathname}?dbfile=<samp>path/to/db.json</samp></code>`
-        }).show();
-        return;
+    if (AppParams.databaseFile === null) {
+        await AppConfig.init();
+        const filesListScreen = new DataFilesListScreen({
+            title: AppParams.appName,
+            dataFilesList: AppConfig.dataFilesList
+        });
+        const url = await filesListScreen.show();
+        const params = new URLSearchParams(window.location.search);
+        // TODO: handle through AppParams
+        params.set("dbfile", url);
+        window.location.search = params.toString();
     }
 
     const errorHandler = (e) => {
@@ -454,8 +462,8 @@ async function loadData() {
     }
 
     try {
-        const jsonReader = new JsonReader(AppParams.databaseFile, {readFile: readFileXHR});
-        const db = new Database(jsonReader);
+        const dbReader = new JsonReader(AppParams.databaseFile, {readFile: readFileXHR});
+        const db = new Database(dbReader);
 
         db.getName().then((name)=>updateTitles({dbName: name, currentGrid: AppParams.gridId})).catch(errorHandler);
 

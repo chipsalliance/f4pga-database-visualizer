@@ -10,6 +10,7 @@
   "dependencies": {
     "@material/button": "^7.0.0",
     "@material/tab-bar": "^7.0.0",
+    "@material/textfield": "^7.0.0",
     "chroma-js": "^2.1.0",
     "expr-eval": "^2.0.2",
     "lodash": "^4.17.20"

@@ -1,0 +1,93 @@
+@use "@material/theme" with (
+    $surface: #5a2ab5,
+    $on-surface: #fff,
+    $primary: #fff,
+    $on-primary: #000,
+    $background: #5a2ab5,
+);
+@use "@material/textfield";
+@use "@material/textfield/icon";
+@include textfield.core-styles;
+@include icon.icon-core-styles;
+
+.mdc-text-field {
+    @include textfield.density(-2);
+    .mdc-text-field__icon {
+        margin-right: 0;
+    }
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 32px 0;
+
+    background-color: #5a2ab5;
+    color: white;
+
+    &.type-user {
+        background-color: #212121;
+    }
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+
+    > * {
+        width: min(max(33%, 720px), calc(100vw - 32px));
+    }
+
+    h1 {
+        margin: 0 0 1em 0;
+    }
+
+    p {
+        line-height: 1.5em;
+        margin: 0;
+    }
+
+    code {
+        border-radius: 2px;
+        padding: 0 1px;
+        margin: 0 -1px;
+        background-color: #0004;
+
+        samp {
+            font-style: italic;
+            font-weight: 700;
+        }
+    }
+}
+
+.data-files-list-screen {
+    ul {
+        list-style: none inside;
+        overflow-y: auto;
+        padding: 0;
+        li {
+            line-height: 32px;
+            padding: 0 16px;
+            font-weight: 700;
+            cursor: pointer;
+
+            border-radius: 4px;
+
+            &[data-url]::after {
+                content: attr(data-url);
+                padding-left: 8px;
+                opacity: 0.5;
+                font-weight: 400;
+            }
+
+            &:hover {
+                background-color: #fff1;
+            }
+        }
+    }
+}

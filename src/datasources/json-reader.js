@@ -92,7 +92,7 @@ export class JsonReader extends ReaderInterface {
         if(this.loadJsonPromise == null) {
             this.loadJsonPromise = fetchAndParseJsonData();
         }
-        await this.loadJsonPromise;
+        return this.loadJsonPromise;
     }
 
     /**

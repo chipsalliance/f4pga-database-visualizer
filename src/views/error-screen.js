@@ -1,4 +1,4 @@
-require("./error-screen.scss");
+require("./overlay.scss");
 
 export default class ErrorScreen {
     constructor({title=undefined, message, type="unknown"}) {
@@ -12,11 +12,11 @@ export default class ErrorScreen {
         if (this.title)
             document.title = this.title;
         body.innerHTML = `
-            <div class="error-screen type-${this.type}">
+            <div class="overlay type-${this.type}">
                 <h1>Oops...</h1>
                 <p>${this.message}</p>
             </div>
         `;
-        body.classList.add("error-screen-visible");
+        body.classList.add("overlay-visible");
     }
 }
