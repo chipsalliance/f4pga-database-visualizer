@@ -12,6 +12,7 @@ import AppParams from "./app-params";
 import ErrorScreen from "./views/error-screen";
 
 import "./styles.scss";
+import {elementFromHtml} from "./utils/element-from-html";
 
 
 var mdc_tab_bars = {}
@@ -106,12 +107,6 @@ gridChildElementsLUT.setRowHeader = function(y, element) {this.setElement(0, y+1
 let gridActiveElements = new Set();
 
 let firstTileClickEvent = true;
-
-function elementFromHtml(html) {
-    const template = document.createElement('template');
-    template.innerHTML = html.trim();
-    return template.content.firstChild;
-}
 
 const openTileGridButton = {
     node: undefined,
