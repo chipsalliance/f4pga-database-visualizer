@@ -2,7 +2,7 @@ export class DefinitionListBuilder {
     constructor(attrs={}) {
         this.dl = document.createElement("dl");
         for (const [attr, value] of Object.entries(attrs)) {
-            this.dl[attr] = value;
+            this.dl.setAttribute(attr, value);
         }
     }
 
@@ -42,7 +42,7 @@ export class ListBuilder {
     constructor(tagName="ul", attrs={}) {
         this.l = document.createElement(tagName);
         for (const [attr, value] of Object.entries(attrs)) {
-            this.l[attr] = value;
+            this.l.setAttribute(attr, value);
         }
     }
 
