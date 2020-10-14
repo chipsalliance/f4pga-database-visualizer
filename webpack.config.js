@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 module.exports = {
   mode: 'development',
@@ -8,6 +9,9 @@ module.exports = {
     ignored: /node_modules/
   },
   devtool: "source-map",
+  devServer: {
+    contentBase: path.join(__dirname, 'examples')
+  },
 
   entry: './src/app.js',
   plugins: [
