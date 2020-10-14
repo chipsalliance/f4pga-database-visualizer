@@ -4,8 +4,9 @@
   "license": "ISC",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --progress",
-    "build": "webpack --output-path dist"
+    "start": "webpack-dev-server --env.NODE_ENV=development -d --progress",
+    "build": "webpack --env.NODE_ENV=production -p",
+    "devbuild": "webpack --env.NODE_ENV=development -p"
   },
   "dependencies": {
     "@material/button": "^7.0.0",

@@ -38,7 +38,7 @@ In order to create deployable package which doesn't require node nor npm, run:
 npm run build
 ```
 
-The bundled app files should be created in `dist` subdirectory.
+The bundled app files should be created in `dist/production` subdirectory.
 
 ### Starting from bundle
 
