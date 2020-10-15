@@ -4,7 +4,7 @@ function log(...args) {
 
 const AppParams = {}
 
-AppParams.appName = "Symbiflow Database Visualizer";
+AppParams.appName = "SymbiFlow Database Visualizer";
 
 const params = new URLSearchParams(window.location.search);
 

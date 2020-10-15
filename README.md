@@ -1,4 +1,4 @@
-# Symbiflow Database Visualizer
+# SymbiFlow Database Visualizer
 
 
 
