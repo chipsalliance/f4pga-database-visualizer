@@ -3,6 +3,8 @@ name: build-gh-pages
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
@@ -11,13 +13,13 @@ jobs:
       - name: Checkout symbiflow-database-visualizer
         uses: actions/checkout@v2
         with:
-          path: ${{github.repository}}
+          persist-credentials: false
 
       - name: Checkout prjxray-db
         uses: actions/checkout@v2
         with:
           repository: SymbiFlow/prjxray-db
-          path: prjxray-db
+          path: external_repos/prjxray-db
 
       - uses: actions/setup-node@v1
         with:
@@ -25,15 +27,18 @@ jobs:
 
       - name: Install node packages
         run: |
-          cd ${{github.repository}}
           npm install
 
       - name: Build app bundle and data files
         run: |
-          export PRJXRAYDB_DIR="$(realpath prjxray-db)"
-          cd ${{github.repository}}
+          export PRJXRAYDB_DIR="$(realpath external_repos/prjxray-db)"
           ./utils/build-all.sh
 
-      - uses: actions/upload-artifact@v2
+      - name: Deploy page
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
-          path: ${{github.repository}}/dist/production/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: dist/production/
+          CLEAN: true
