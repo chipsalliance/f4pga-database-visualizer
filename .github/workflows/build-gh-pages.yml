@@ -1,0 +1,39 @@
+name: build-gh-pages
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout symbiflow-database-visualizer
+        uses: actions/checkout@v2
+        with:
+          path: ${{github.repository}}
+
+      - name: Checkout prjxray-db
+        uses: actions/checkout@v2
+        with:
+          repository: SymbiFlow/prjxray-db
+          path: prjxray-db
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+
+      - name: Install node packages
+        run: |
+          cd ${{github.repository}}
+          npm install
+
+      - name: Build app bundle and data files
+        run: |
+          export PRJXRAYDB_DIR="$(realpath prjxray-db)"
+          cd ${{github.repository}}
+          ./utils/build-all.sh
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ${{github.repository}}/dist/production/
