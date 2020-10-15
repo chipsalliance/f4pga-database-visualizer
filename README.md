@@ -1,7 +1,5 @@
 # SymbiFlow Database Visualizer
 
-
-
 ## Dependences
 
 * a web browser (Chrome/Chromium is recommended)
@@ -56,22 +54,14 @@ Optionally, you can upload bundled app to a remote server.
 
 The app needs a data file in order to show something useful.
 
-### Generating data files from prjxray's `tilegrid.json`
+### Generating data files from prjxray-db
 
+Following line will generate `artix7.json` data file from files in `$PRJXRAYDB_DIR/artix7/xc7a100tcsg324-1` directory:
 ```
-cd utils/archdefs2sdbv/
-mkdir data
-./tilegrid-to-sdbv.py \
-    --input $PRJXRAYDB/artix7/xc7a100tcsg324-1/tilegrid.json \
-    --output-dir ./data/ \
-    --output-file-name artix7.json
+./utils/datafilegen/prjxraydbconverter \
+    $PRJXRAYDB_DIR/artix7/xc7a100tcsg324-1
+    ./dist/production/data/artix7.json
 ```
-
-| Argument                       | Description                                                   |
-|--------------------------------|---------------------------------------------------------------|
-| `--input PATH_TO_TILEGRID`     | specifies input file.                                         |
-| `--output-dir DIR`             | specifies where to save data files. The directory must exist. |
-| `--output-file-name FILE_NAME` | specifies main data file name.                                |
 
 ## Using data files with the app
 
