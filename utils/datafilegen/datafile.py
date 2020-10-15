@@ -3,6 +3,7 @@
 from datetime import datetime
 from json import JSONEncoder
 import os
+from pathlib import Path
 
 
 class SdbvImport:
@@ -11,7 +12,7 @@ class SdbvImport:
         self.data = data
 
     def toJson(self):
-        return {"@import": self.fileName}
+        return {"@import": str(self.fileName)}
 
 
 class SdbvGridCells:
@@ -137,7 +138,7 @@ class SdbvDataFile:
         encoder = JSONEncoder(default=converter, indent=2)
         filepath = os.path.normpath(os.path.join(outDir, mainFileName))
         with open(filepath, "w") as output:
-            output.write(encoder.encode(self))
+            output.write(encoder.encode(o=self))
         files.append(filepath)
         for filename, obj in imports.items():
             filepath = os.path.normpath(os.path.join(outDir, filename))

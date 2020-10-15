@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+
+import argparse
+from datafile import *
+import json
+import sys
+import re
+from datetime import datetime
+import os
+from pathlib import Path
+
+
+class PrjxrayDbConverter:
+    def __init__(self, src):
+        # Using abspath to avoid symlink resolving
+        self.src = Path(os.path.abspath(src))
+        if self.src.is_file():
+            self.src = self.src.parent
+        self.data_file = SdbvDataFile()
+
+
+    @staticmethod
+    def _get_part_info_from_path(path):
+        # Path example: prjxray-db/artix7/xc7a100tcsg324-1
+        part = path.name
+        family = path.parent.name
+        return (part, family)
+
+
+    def _process_tilegrid(self):
+        obj = None
+        with open(self.src/"tilegrid.json", "r") as file:
+            obj = json.load(file)
+
+        self.data_file.setBuildDate(datetime.now())
+
+        # Grid-related properties
+        col_headers = None
+        row_headers = None
+        cols_range = [None, None]
+        rows_range = [None, None]
+
+        def update_range(range, value):
+            if range[0] is None or value < range[0]:
+                range[0] = value
+            if range[1] is None or value > range[1]:
+                range[1] = value
+
+        grid = SdbvGrid()
+        grid.cells.fieldOrder = ["col", "row", "fullName", "type"]
+        grid.cells.templateConsts = {
+            "COLORS": {}
+        }
+        grid.cells.fieldTemplates = {
+            "color": r"{get(COLORS, type)}",
+            # \u00a0 = non-breaking space
+            "name": r"{replace(fullName, 'INTERFACE_','IFACE_', '_(.)_','\u00a0$1_', '^(.)_','$1\u00a0', '_',' ')}"
+        }
+
+        # Coloring rules from https://github.com/SymbiFlow/prjxray/tree/master/htmlgen
+        color_map = [
+            (r"NULL|.*BRK.*", None),
+            (r".*IO.*", "#757575"),
+            (r"INT_INTERFACE_[LR]|DSP_[LR]", "#AB47BC"),
+            (r"BRAM_INT_INTERFACE_[LR]|BRAM_[LR]", "#4DD0E1"),
+            (r"HCLK_[LR]", "#D4E157"),
+            (r".*CLK.*", "#8BC34A"),
+            (r".*CMT.*", "#43A047"),
+            (r"CLBLM_[LR]", "#FF5722"),
+            (r"CLBLL_[LR]", "#FFC107"),
+            (r"INT_L|INT_R", "#1E88E5"),
+            (r".*INT_FEEDTHRU.*", "#1565C0"),
+            (r".*", "#BDBDBD")
+        ]
+        color_map = [(re.compile(pat), color) for pat,color in color_map]
+
+        def lookup_color(cellType):
+            for (pat, color) in color_map:
+                if pat.fullmatch(cellType):
+                    return color
+            return None
+
+        for name, entries in obj.items():
+            col = entries["grid_x"]
+            row = entries["grid_y"]
+            typ = entries["type"]
+            cell = {
+                "fullName": name,
+                "col":  entries["grid_x"],
+                "row":  entries["grid_y"],
+                "type": entries["type"],
+            }
+            update_range(cols_range, col)
+            update_range(rows_range, row)
+
+            if entries["type"] not in grid.cells.templateConsts["COLORS"]:
+                grid.cells.templateConsts["COLORS"][entries["type"]] = lookup_color(entries["type"])
+
+
+            grid.cells.addCell(cell)
+
+        grid.colsRange = cols_range
+        grid.rowsRange = rows_range
+
+        self.data_file.grids[""] = grid
+
+
+    def convert(self):
+        self.data_file = SdbvDataFile()
+
+        (part, family) = PrjxrayDbConverter._get_part_info_from_path(self.src)
+        self.data_file.name = f"{family} ({part})"
+
+        self._process_tilegrid()
+
+        return self.data_file
+
+
+def fs_friendly_name(name, already_used_names=[]):
+    safe_name = re.sub("[^a-zA-Z0-9_-]", "_", name)
+    if safe_name in already_used_names:
+        match = re.fullmatch("(.*?)(?:_([1-9][0-9]*))?", safe_name)
+        assert(match is not None)
+        base = match.group(1)
+        number = match.group(2)
+        number = int(number) if number is not None else 0
+        while safe_name in already_used_names:
+            number += 1
+            safe_name = f"{base}_{number}"
+    return safe_name
+
+
+def run(src, out):
+    converter = PrjxrayDbConverter(src)
+    data_file = converter.convert()
+
+    base_name = out.stem
+    ext = out.suffix
+    used_grid_names = set()
+    for name, grid in data_file.grids.items():
+        if name != "":
+            fs_name = fs_friendly_name(name, used_grid_names)
+            used_grid_names.add(fs_name)
+            grid_file_name = f"{base_name}.{fs_name}.data{ext}"
+        else:
+            grid_file_name = f"{base_name}.data{ext}"
+        grid.cells.data = SdbvImport(grid_file_name, grid.cells.data)
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    return data_file.writeFiles(out.name, out.parent)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("src", type=Path, help="Path to a source file or a directory with source files.")
+    parser.add_argument("out", type=Path, help="Output data file path.")
+
+    args = parser.parse_args()
+    files = run(args.src, args.out)
+
+    for file in files:
+        print(file)
+
+
+if __name__ == "__main__":
+    main()
