@@ -116,12 +116,13 @@ class SdbvDataFile:
         result["grids"] = self.grids
         return result
 
-    def writeFiles(self, mainFileName, outDir):
+    def writeFiles(self, mainFileName, outDir, minimalOutput=True):
         """Write main data file and `@import` files to outDir.
 
         Args:
             mainFileName (str): Name of main data file
             outDir (str): Directory where to save files
+            minimalOutput(bool): Produces minimal JSON (without indents and line breaks) when set to True.
         """
 
         imports = {}
@@ -135,7 +136,9 @@ class SdbvDataFile:
                 return JSONEncoder.default(o)
 
         files = []
-        encoder = JSONEncoder(default=converter, indent=2)
+        indent = None if minimalOutput else 2
+        separators = (',', ':') if minimalOutput else (',', ': ')
+        encoder = JSONEncoder(default=converter, indent=indent, separators=separators)
         filepath = os.path.normpath(os.path.join(outDir, mainFileName))
         with open(filepath, "w") as output:
             output.write(encoder.encode(o=self))

@@ -130,7 +130,7 @@ def fs_friendly_name(name, already_used_names=[]):
     return safe_name
 
 
-def run(src, out):
+def run(src, out, readable_output=False):
     converter = PrjxrayDbConverter(src)
     data_file = converter.convert()
 
@@ -147,16 +147,17 @@ def run(src, out):
         grid.cells.data = SdbvImport(grid_file_name, grid.cells.data)
 
     out.parent.mkdir(parents=True, exist_ok=True)
-    return data_file.writeFiles(out.name, out.parent)
+    return data_file.writeFiles(out.name, out.parent, minimalOutput=(not readable_output))
 
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--readable-output", action="store_true", help="Use line breaks and indents in output JSON files.")
     parser.add_argument("src", type=Path, help="Path to a source file or a directory with source files.")
     parser.add_argument("out", type=Path, help="Output data file path.")
 
     args = parser.parse_args()
-    files = run(args.src, args.out)
+    files = run(args.src, args.out, readable_output=args.readable_output)
 
     for file in files:
         print(file)
