@@ -1,0 +1,149 @@
+@use "@material/elevation";
+
+// HEADER
+
+.grid-header {
+    z-index: 2;
+    position: sticky;
+
+    border: 0 solid var(--grid-view__header--divider-color);
+    border-width: 0 1px 1px 0;
+    background-color: var(--grid-view__header--bg-color);
+    color: var(--grid-view__header--fg-color);
+    &.active {
+        background-color: var(--grid-view__header--active-bg-color);
+        color: var(--grid-view__header--active-fg-color);
+    }
+
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid-row-header {
+    grid-row: calc(var(--index) + 2);
+    grid-column: 1;
+    left: 0px;
+
+    margin: -0px -1px -1px 0;
+}
+
+.grid-column-header {
+    grid-row: 1;
+    grid-column: calc(var(--index) + 2);
+    top: 0px;
+
+    margin: 0 -1px -1px 0;
+}
+
+.grid-corner-header {
+    z-index: 3;
+    grid-row: 1;
+    grid-column: 1;
+    left: 0px;
+    top: 0px;
+
+    margin: 0 -1px -1px 0;
+}
+
+// TILE
+
+.grid-tile {
+    grid-row: calc(var(--row) + 2) / calc(var(--row) + 2 + var(--height, 1)) ;
+    grid-column: calc(var(--column) + 2) / calc(var(--column) + 2 + var(--width, 1));
+    z-index: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-overflow: ellipsis;
+    padding: 2px 6px;
+    // height lower than 24px causes huge performance drop, at least in Firefox
+    min-height: max(24px, 1.5em);
+    position: relative;
+
+    cursor: pointer;
+    border: 1px solid var(--grid-view--bg-color);
+    border-radius: 4px;
+    background-color: var(--bg, var(--grid-view__tile--default-bg-color));
+    color: var(--fg, var(--grid-view__tile--default-fg-color));
+
+    &::before {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        left: -1px;
+        right: -1px;
+        top: -1px;
+        bottom: -1px;
+        visibility: hidden;
+
+        @include elevation.elevation(4);
+        background-color: var(--sel-bg, #fff4);
+        border-radius: inherit;
+        border: 2px solid var(--sel-border, #0008);
+    }
+
+    &.active {
+        z-index: 1;
+
+        border-color: var(--bg, #0000);
+        &::before {
+            visibility: visible;
+        }
+    }
+
+    &.color-0  {--bg:#757575; --fg:#fff; --sel-bg: #a4a4a4; --sel-border: #494949}
+    &.color-1  {--bg:#E53935; --fg:#000; --sel-bg: #ff6f60; --sel-border: #ab000d}
+    &.color-2  {--bg:#FB8C00; --fg:#000; --sel-bg: #ffbd45; --sel-border: #c25e00}
+    &.color-3  {--bg:#689F38; --fg:#000; --sel-bg: #99d066; --sel-border: #387002}
+    &.color-4  {--bg:#00ACC1; --fg:#000; --sel-bg: #5ddef4; --sel-border: #007c91}
+    &.color-5  {--bg:#1565C0; --fg:#fff; --sel-bg: #5e92f3; --sel-border: #003c8f}
+    &.color-6  {--bg:#5E35B1; --fg:#fff; --sel-bg: #9162e4; --sel-border: #280680}
+    &.color-7  {--bg:#F06292; --fg:#000; --sel-bg: #ff94c2; --sel-border: #ba2d65}
+
+    &.color-8  {--bg:#9E9E9E; --fg:#000; --sel-bg: #cfcfcf; --sel-border: #707070}
+    &.color-9  {--bg:#E57373; --fg:#000; --sel-bg: #ffa4a2; --sel-border: #af4448}
+    &.color-10 {--bg:#FBC02D; --fg:#000; --sel-bg: #fff263; --sel-border: #c49000}
+    &.color-11 {--bg:#8BC34A; --fg:#000; --sel-bg: #bef67a; --sel-border: #5a9216}
+    &.color-12 {--bg:#4DD0E1; --fg:#000; --sel-bg: #88ffff; --sel-border: #009faf}
+    &.color-13 {--bg:#039BE5; --fg:#000; --sel-bg: #63ccff; --sel-border: #006db3}
+    &.color-14 {--bg:#9575CD; --fg:#000; --sel-bg: #c7a4ff; --sel-border: #65499c}
+    &.color-15 {--bg:#F48FB1; --fg:#000; --sel-bg: #ffc1e3; --sel-border: #bf5f82}
+
+    &.color-16 {--bg:#424242; --fg:#fff; --sel-bg: #6d6d6d; --sel-border: #1b1b1b}
+    &.color-17 {--bg:#B71C1C; --fg:#fff; --sel-bg: #f05545; --sel-border: #7f0000}
+    &.color-18 {--bg:#FF5722; --fg:#000; --sel-bg: #ff8a50; --sel-border: #c41c00}
+    &.color-19 {--bg:#2E7D32; --fg:#fff; --sel-bg: #60ad5e; --sel-border: #005005}
+    &.color-20 {--bg:#00838F; --fg:#000; --sel-bg: #4fb3bf; --sel-border: #005662}
+    &.color-21 {--bg:#283593; --fg:#fff; --sel-bg: #5f5fc4; --sel-border: #001064}
+    &.color-22 {--bg:#4A148C; --fg:#fff; --sel-bg: #7c43bd; --sel-border: #12005e}
+    &.color-23 {--bg:#D81B60; --fg:#fff; --sel-bg: #ff5c8d; --sel-border: #a00037}
+}
+
+.grid-view {
+    overflow: auto;
+    cursor: arrow;
+    user-select: none;
+    background-color: var(--grid-view--bg-color);
+    color: var(--grid-view--fg-color);
+
+    > .grid-view__grid {
+        font-size: 0.8em;
+
+        width: min-content;
+        height: min-content;
+
+        position: relative;
+        z-index: 0;
+        gap: 1px;
+
+        display: grid;
+        grid-template-columns: min-content;
+        grid-template-rows: min-content;
+        grid-auto-columns: var(--column-width, 1fr);
+        grid-auto-rows: 1fr;
+    }
+}

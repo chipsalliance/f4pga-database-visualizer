@@ -1,7 +1,6 @@
 import {escape} from "lodash";
 import {MDCTabBar} from '@material/tab-bar';
 import {MDCRipple} from "@material/ripple";
-import {findMostContrastingColor, findNearestPaletteColor, firstColorWithContrast} from "./utils/colors";
 
 import {Database} from "./db/db";
 import * as HTMLHelpers from "./htmlhelpers";
@@ -15,6 +14,8 @@ import ErrorScreen from "./views/error-screen";
 import "./styles.scss";
 import DataFilesListScreen from "./views/data-files-list-screen";
 import {elementFromHtml} from "./utils/element-from-html";
+
+import {GridModel, GridView} from "./components/grid-view/grid-view";
 
 
 var mdc_tab_bars = {}
@@ -96,20 +97,6 @@ function renderDescription(containerNode, description) {
     }
 }
 
-const gridChildElementsLUT = [];
-gridChildElementsLUT.getElement   = function(x, y) {return this[y * this.width + x];}
-gridChildElementsLUT.setElement   = function(x, y, element) {this[y * this.width + x] = element;}
-gridChildElementsLUT.getCell      = function(x, y) {return this.getElement(x+1, y+1);}
-gridChildElementsLUT.setCell      = function(x, y, element) {this.setElement(x+1, y+1, element);}
-gridChildElementsLUT.getColHeader = function(x) {return this.getElement(x+1, 0);}
-gridChildElementsLUT.setColHeader = function(x, element) {this.setElement(x+1, 0, element)}
-gridChildElementsLUT.getRowHeader = function(y) {return this.getElement(0, y+1);}
-gridChildElementsLUT.setRowHeader = function(y, element) {this.setElement(0, y+1, element)}
-
-let gridActiveElements = new Set();
-
-let firstTileClickEvent = true;
-
 const openTileGridButton = {
     node: undefined,
     mdc: undefined,
@@ -128,71 +115,6 @@ const openTileGridButton = {
         return this.node;
     }
 };
-async function tileClickEventHandler(event) {
-    const tileElement = event.target;
-    const cellElement = tileElement.classList.contains("cell") ? tileElement : tileElement.parentElement;
-    const itemInfoElement = document.getElementById("item-info");
-    const cells = await this.getCells();
-    const cell = await cells.getById(parseInt(tileElement.getAttribute("data-id")));
-    const cellFullName = cell.fullName || cell.name;
-
-    gridActiveElements.forEach((el) => el.classList.remove("active"));
-    gridActiveElements.clear();
-    tileElement.classList.add("active");
-    gridActiveElements.add(tileElement);
-    if (cellElement != tileElement) {
-        cellElement.classList.add("active");
-        gridActiveElements.add(cellElement);
-    }
-
-    const [columnsRange, rowsRange] = [await this.getColumnsRange(), await this.getRowsRange()];
-    const x = columnsRange.indexOf(cell.col);
-    const y = rowsRange.indexOf(cell.row);
-
-    const rowHeader = gridChildElementsLUT.getRowHeader(y);
-    const colHeader = gridChildElementsLUT.getColHeader(x);
-    rowHeader.classList.add("active");
-    colHeader.classList.add("active");
-    gridActiveElements.add(rowHeader);
-    gridActiveElements.add(colHeader);
-
-    itemInfoElement.innerHTML = "";
-    const h3 = document.createElement("h3");
-    h3.innerText = cellFullName;
-    itemInfoElement.appendChild(h3);
-
-    renderDescription(itemInfoElement, cell.description);
-
-    // Ignore null/0 but allow ""
-    if ((cell.targetGrid !== undefined) && (cell.targetGrid.constructor == String)) {
-        const url = new URL(window.location);
-        url.searchParams.set("grid", cell.targetGrid);
-
-        try {
-            const targetGrid = await this.database.getGrid(cell.targetGrid);
-            let targetGridName = await targetGrid.getName();
-            if (targetGridName === null) {
-                targetGridName = cell.targetGrid;
-            }
-            const a = openTileGridButton.get(url, cell.targetGrid);
-            itemInfoElement.appendChild(a);
-        } catch (e) {
-            console.log(`Target grid not found.`, e, cell);
-        }
-    }
-    if (firstTileClickEvent) {
-        firstTileClickEvent = false;
-        // Activate "cell" side panel tab
-        const sidePanelTabBar = mdc_tab_bars["side-panel-tab-bar"];
-        sidePanelTabBar.mdc.activateTab(sidePanelTabBar.tabIndexes["side-panel-tile-tab"]);
-    }
-    history.replaceState(undefined, undefined, "#" + encodeURIComponent(cellFullName))
-}
-function tileDoubleClickEventHandler(event) {
-    const tileElement = event.target;
-    const cellElement = tileElement.classList.contains("cell") ? tileElement : tileElement.parentElement;
-    console.log("");
-}
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
     let databaseInfoElement = document.getElementById("database-info");
@@ -278,7 +200,6 @@ function updateDatabaseInfoView(name, description, version, buildDate, buildSour
     }
 }
 
-
 let updateTitleCurrentGrid = "";
 let updateTitleDbName = "";
 function updateTitles({dbName=undefined, currentGrid=undefined}={}) {
@@ -319,164 +240,116 @@ function updateTitles({dbName=undefined, currentGrid=undefined}={}) {
     }
 }
 
-async function updateGrid(grid) {
-    let [columnHeaders, rowHeaders] = [await grid.getColumnHeaders(), await grid.getRowHeaders()];
-
-    if (columnHeaders === null) {
-        const columnsRange = await grid.getColumnsRange();
-        columnHeaders = [...columnsRange];
-    }
-    if (rowHeaders === null)  {
-        const rowsRange = await grid.getRowsRange();
-        rowHeaders = [...rowsRange];
+class DataFileGridModel extends GridModel {
+    constructor(columnHeaders, rowHeaders, columnsRange, rowsRange, cells) {
+        super();
+        this._columnHeaders = columnHeaders;
+        this._rowHeaders = rowHeaders;
+        this._columnsRange = columnsRange;
+        this._rowsRange = rowsRange;
+        this._cells = cells;
     }
 
-    const gridElement = document.getElementById("grid-view-grid");
-    gridElement.hidden = true;
+    get columnCount() { return this._columnsRange.length; }
+    get rowCount() { return this._rowsRange.length; }
 
-    gridElement.innerHTML = "";
-    gridElement.style.setProperty("--cols", columnHeaders.length);
-    gridElement.style.setProperty("--rows", rowHeaders.length);
-    gridChildElementsLUT.length == 0;
-    gridChildElementsLUT.width  = columnHeaders.length + 1;
-    gridChildElementsLUT.height = rowHeaders.length + 1;
+    get columnHeaders() {
+        return this._columnHeaders || [...this._columnsRange];
+    }
+    get rowHeaders() {
+        return this._rowHeaders || [...this._rowsRange];
+    }
 
-    // Create header's corner cell
-    let header = document.createElement("div");
-    header.classList.add("corner-header");
-    gridChildElementsLUT.setElement(0, 0, header);
-    gridElement.appendChild(header);
+    *iterCells() {
+        let id = 0;
+        for (const cell of this._cells) {
+            const data = {
+                column: this._columnsRange.indexOf(cell.col),
+                row: this._rowsRange.indexOf(cell.row),
+                width: cell.width || 1,
+                height: cell.height || 1,
+                text: cell.name,
+                title: cell.fullName || cell.name,
+                color: null,
+                dataId: id++,
+            };
+            if ((cell.color !== undefined) && (cell.color !== null)) {
+                const colorIndex = parseInt(cell.color);
+                data.color = isFinite(colorIndex) ? colorIndex : cell.color;
+            }
 
-    // Create column headers
-    columnHeaders.forEach((name, x) => {
-        let header = document.createElement("div");
-        header.innerText = name;
-        header.classList.add("col-header");
-        header.style.setProperty("--x", x.toString());
-        gridChildElementsLUT.setColHeader(x, header);
-        gridElement.appendChild(header);
-    });
+            yield data;
+        }
+    }
+};
 
-    // Create row headers
-    rowHeaders.forEach((name, y) => {
-        let header = document.createElement("div");
-        header.innerText = name;
-        header.classList.add("row-header");
-        header.style.setProperty("--y", y.toString());
-        gridChildElementsLUT.setRowHeader(y, header);
-        gridElement.appendChild(header);
-    });
+let gridView = null;
+
+let firstActiveCellChange = true;
+async function activeCellChanged(dataId, column, row) {
+    const itemInfoElement = document.getElementById("item-info");
+    if (dataId === null) {
+        itemInfoElement.innerText = "Select a tile to show details.";
+        return
+    }
+
+    const cells = await this.getCells();
+    const cell = await cells.getById(dataId);
+    const cellFullName = cell.fullName || cell.name;
+
+    itemInfoElement.innerHTML = "";
+    const h3 = document.createElement("h3");
+    h3.innerText = cellFullName;
+    itemInfoElement.appendChild(h3);
+
+    renderDescription(itemInfoElement, cell.description);
+
+    // Ignore null/0 but allow ""
+    if ((cell.targetGrid !== undefined) && (cell.targetGrid.constructor == String)) {
+        const url = new URL(window.location);
+        url.searchParams.set("grid", cell.targetGrid);
+
+        try {
+            const targetGrid = await this.database.getGrid(cell.targetGrid);
+            let targetGridName = await targetGrid.getName();
+            if (targetGridName === null) {
+                targetGridName = cell.targetGrid;
+            }
+            const a = openTileGridButton.get(url, cell.targetGrid);
+            itemInfoElement.appendChild(a);
+        } catch (e) {
+            console.log(`Target grid not found.`, e, cell);
+        }
+    }
+    if (firstActiveCellChange) {
+        firstActiveCellChange = false;
+        // Activate "cell" side panel tab
+        const sidePanelTabBar = mdc_tab_bars["side-panel-tab-bar"];
+        sidePanelTabBar.mdc.activateTab(sidePanelTabBar.tabIndexes["side-panel-tile-tab"]);
+    }
+    history.replaceState(undefined, undefined, "#" + encodeURIComponent(cellFullName))
 }
 
-async function updateGridCells(grid) {
-    function isTileElement(element) {return element.classList.contains("tile");};
-
-    const COLORS_NUM = 24;
-    const gridElement = document.getElementById("grid-view-grid");
+async function updateGridView(grid) {
     const [columnsRange, rowsRange] = [await grid.getColumnsRange(), await grid.getRowsRange()];
+    const [columnHeaders, rowHeaders] = [await grid.getColumnHeaders(), await grid.getRowHeaders()];
     const cells = await grid.getCells();
     await cells.initData();
+
+    gridView.update({onActiveCellChanged: activeCellChanged.bind(grid)});
+
+    const model = new DataFileGridModel(columnHeaders, rowHeaders, columnsRange, rowsRange, cells);
+    gridView.update({model: model});
+
     const selectedCellName = decodeURIComponent(window.location.hash).substring(1);
-    let cellToClick = null;
-    let id = 0;
-    // FIXME: use DocumentFragment to assemble the tree
-    gridElement.hidden = true;
-    const colorCache = {};
     for (const cell of cells) {
-        // FIXME: use <template> to not set everything from scratch
         const fullName = cell.fullName || cell.name;
-        const tileElement = document.createElement("div");
-        tileElement.setAttribute("data-id", id++);
-        tileElement.innerText = cell.name;
-        tileElement.title = fullName;
-        tileElement.classList.add("tile");
-        if ((cell.color !== undefined) && (cell.color !== null)) {
-            const colorIndex = parseInt(cell.color);
-            if (isFinite(colorIndex)) {
-                tileElement.classList.add(`c${cell.color % COLORS_NUM}`);
-            } else {
-                let bg, fg;
-                if (Object.keys(colorCache).includes(cell.color)) {
-                    [bg, fg] = colorCache[cell.color];
-                } else {
-                    bg = findNearestPaletteColor(cell.color);
-                    fg = firstColorWithContrast(bg, ["#000", "#fff"], 7);
-                    if (fg === undefined) {
-                        fg = findMostContrastingColor(bg, ["#000", "#fff"]);
-                    }
-                    colorCache[cell.color] = [bg, fg];
-                }
-                tileElement.style.setProperty("--bg", bg)
-                tileElement.style.setProperty("--fg", fg)
-            }
+        if (selectedCellName === fullName) {
+            const column = columnsRange.indexOf(cell.col);
+            const row = rowsRange.indexOf(cell.row);
+            gridView.setActiveCell(column, row, true);
+            break;
         }
-        tileElement.addEventListener("click", tileClickEventHandler.bind(grid));
-        tileElement.addEventListener("dblclick", tileDoubleClickEventHandler.bind(grid));
-        if (selectedCellName === fullName)
-            cellToClick = tileElement;
-
-        const x = columnsRange.indexOf(cell.col);
-        const y = rowsRange.indexOf(cell.row);
-
-        let container = gridElement;
-        const cellElementAtXY = gridChildElementsLUT.getCell(x, y);
-        if (cellElementAtXY != undefined) {
-            if (isTileElement(cellElementAtXY)) {
-                // element is a tile
-                // create container cell, put it in tile's place, and move the tile inside it
-                container = document.createElement("div");
-                container.classList.add("cell");
-                container.style.setProperty("--x", x.toString());
-                container.style.setProperty("--y", y.toString());
-                container.style.setProperty("--w", (cell.width || 1).toString());
-                container.style.setProperty("--h", (cell.height || 1).toString());
-                gridChildElementsLUT.setCell(x, y, container);
-                cellElementAtXY.classList.remove("cell");
-                cellElementAtXY.style.removeProperty("--x");
-                cellElementAtXY.style.removeProperty("--y");
-                cellElementAtXY.style.removeProperty("--w");
-                cellElementAtXY.style.removeProperty("--h");
-                // FIXME: do not insert elements one by one. Bulk-insert all elements when everything is created
-                gridElement.replaceChild(container, cellElementAtXY);
-                container.appendChild(cellElementAtXY);
-            } else {
-                // the element is a container cell
-                container = cellElementAtXY;
-            }
-        } else {
-            tileElement.style.setProperty("--x", x.toString());
-            tileElement.style.setProperty("--y", y.toString());
-            tileElement.style.setProperty("--w", (cell.width || 1).toString());
-            tileElement.style.setProperty("--h", (cell.height || 1).toString());
-            tileElement.classList.add("cell");
-            gridChildElementsLUT.setCell(x, y, tileElement);
-        }
-
-        container.appendChild(tileElement);
-    }
-
-    gridElement.style.visibility = "hidden";
-    gridElement.hidden = false;
-
-    // Find widest column width by checking each column header's width
-    // FIXME: optimization: create one element with every word from every cell, one word per line, and measure its width
-    let columnWidth = 0;
-    for (let i = 0; i < gridChildElementsLUT.width - 1; i++) {
-        const header = gridChildElementsLUT.getColHeader(i);
-        columnWidth = Math.max(columnWidth, header.clientWidth);
-    }
-
-    gridElement.hidden = true;
-    gridElement.style.setProperty("--column-width", `${columnWidth}px`);
-    gridElement.style.visibility = "visible";
-    gridElement.hidden = false;
-
-    if (cellToClick) {
-        cellToClick.click();
-        const gridViewElement = document.getElementById("grid-view");
-        const scrollX = cellToClick.offsetLeft - (gridViewElement.offsetWidth - cellToClick.offsetWidth) / 2;
-        const scrollY = cellToClick.offsetTop - (gridViewElement.offsetHeight - cellToClick.offsetHeight) / 2;
-        gridViewElement.scrollTo(scrollX, scrollY);
     }
 }
 
@@ -513,6 +386,10 @@ async function loadData() {
         console.error(e);
     }
 
+    gridView = new GridView();
+    const gridViewElement = document.getElementById("grid-view");
+    gridViewElement.replaceWith(gridView.build());
+
     try {
         const dbReader = new JsonReader(AppParams.databaseFile, {readFile: readFileXHR});
         const db = new Database(dbReader);
@@ -544,8 +421,7 @@ async function loadData() {
                     await updateTitles({currentGrid: name})
             });
             grid.getCells().then((cells)=>cells.initData());
-            await updateGrid(grid);
-            await updateGridCells(grid);
+            await updateGridView(grid);
         }).catch(errorHandler);
 
     } catch(e) {

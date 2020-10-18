@@ -100,6 +100,16 @@ body {
     font-family: Nunito, sans-serif;
     font-size: 14px;
     overflow: hidden;
+
+    --grid-view--bg-color:                 #{$cl-gray-light};
+    --grid-view--fg-color:                 #{$cl-gray};
+    --grid-view__header--divider-color:    #{$divider-color};
+    --grid-view__header--bg-color:         #{$cl-gray-light};
+    --grid-view__header--active-bg-color:  #{$cl-gray-mid};
+    --grid-view__header--fg-color:         #{$cl-gray};
+    --grid-view__header--active-fg-color:  #{$cl-gray};
+    --grid-view__tile--default-bg-color:   #{$cl-gray-light};
+    --grid-view__tile--default-fg-color:   #{$cl-gray};
 }
 
 #grid-view-app {
@@ -206,6 +216,9 @@ body {
         }
     }
 
+    .grid-view {
+        grid-area: grid-view;
+    }
     #grid-view {
         grid-area: grid-view;
         background-color: $cl-gray-light;
@@ -231,149 +244,6 @@ body {
 
             &[hidden] {
                 display: none;
-            }
-
-            .cell, .tile {
-                z-index: 0;
-                &.active {
-                    z-index: 1;
-                }
-            }
-
-            %header {
-                z-index: 2;
-                position: sticky;
-
-                border: 0 solid $divider-color;
-                border-width: 0 1px 1px 0;
-                background-color: $cl-gray-light;
-                &.active {
-                    background-color: $cl-gray-mid;
-                }
-
-                padding: 2px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            > .row-header {
-                @extend %header;
-
-                grid-row: calc(var(--y) + 2);
-                grid-column: 1;
-                left: 0px;
-
-                margin: -0px -1px -1px 0;
-            }
-
-            > .col-header {
-                @extend %header;
-
-                grid-row: 1;
-                grid-column: calc(var(--x) + 2);
-                top: 0px;
-
-                margin: 0 -1px -1px -0px;
-            }
-
-            > .corner-header {
-                @extend %header;
-
-                z-index: 3;
-                grid-row: 1;
-                grid-column: 1;
-                left: 0px;
-                top: 0px;
-
-                margin: 0 -1px -1px 0;
-            }
-
-            > .cell {
-                grid-row: calc(var(--y) + 2) / calc(var(--y) + 2 + var(--h, 1)) ;
-                grid-column: calc(var(--x) + 2) / calc(var(--x) + 2 + var(--w, 1));
-                border-radius: 4px;
-            }
-
-            > .cell:not(.tile) {
-                display: grid;
-                grid-template-columns: 100%;
-                gap: 0px;
-            }
-
-            > .cell > .tile:first-of-type { border-radius: 4px 4px 0 0; }
-            > .cell > .tile:last-of-type { border-radius: 0 0 4px 4px; }
-
-            .tile {
-                display: flex;
-                grid-template: 100% / 100%;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                text-overflow: ellipsis;
-                padding: 2px 6px;
-                // height lower than 24px causes huge performance drop, at least in Firefox
-                min-height: max(24px, 1.5em);
-                position: relative;
-
-                border: 1px solid $cl-gray-light;
-
-                background-color: var(--bg, #fff0);
-                color: var(--fg, $cl-gray);
-                cursor: pointer;
-                // @include elevation.elevation(0);
-
-                &::before {
-                    content: '';
-                    z-index: -1;
-                    position: absolute;
-                    left: -1px;
-                    right: -1px;
-                    top: -1px;
-                    bottom: -1px;
-                    visibility: hidden;
-
-                    @include elevation.elevation(4);
-                    background-color: var(--sel-bg, #fff4);
-                    border-radius: inherit;
-                    border: 2px solid var(--sel-border, #0008);
-                }
-
-                &.active {
-                    // @include elevation.elevation(4);
-                    border-color: var(--bg, #0000);
-
-                    &::before {
-                        visibility: visible;
-                    }
-                }
-
-                &.c0  {--bg:#757575; --fg:#fff; --sel-bg: #a4a4a4; --sel-border: #494949}
-                &.c1  {--bg:#E53935; --fg:#000; --sel-bg: #ff6f60; --sel-border: #ab000d}
-                &.c2  {--bg:#FB8C00; --fg:#000; --sel-bg: #ffbd45; --sel-border: #c25e00}
-                &.c3  {--bg:#689F38; --fg:#000; --sel-bg: #99d066; --sel-border: #387002}
-                &.c4  {--bg:#00ACC1; --fg:#000; --sel-bg: #5ddef4; --sel-border: #007c91}
-                &.c5  {--bg:#1565C0; --fg:#fff; --sel-bg: #5e92f3; --sel-border: #003c8f}
-                &.c6  {--bg:#5E35B1; --fg:#fff; --sel-bg: #9162e4; --sel-border: #280680}
-                &.c7  {--bg:#F06292; --fg:#000; --sel-bg: #ff94c2; --sel-border: #ba2d65}
-
-                &.c8  {--bg:#9E9E9E; --fg:#000; --sel-bg: #cfcfcf; --sel-border: #707070}
-                &.c9  {--bg:#E57373; --fg:#000; --sel-bg: #ffa4a2; --sel-border: #af4448}
-                &.c10 {--bg:#FBC02D; --fg:#000; --sel-bg: #fff263; --sel-border: #c49000}
-                &.c11 {--bg:#8BC34A; --fg:#000; --sel-bg: #bef67a; --sel-border: #5a9216}
-                &.c12 {--bg:#4DD0E1; --fg:#000; --sel-bg: #88ffff; --sel-border: #009faf}
-                &.c13 {--bg:#039BE5; --fg:#000; --sel-bg: #63ccff; --sel-border: #006db3}
-                &.c14 {--bg:#9575CD; --fg:#000; --sel-bg: #c7a4ff; --sel-border: #65499c}
-                &.c15 {--bg:#F48FB1; --fg:#000; --sel-bg: #ffc1e3; --sel-border: #bf5f82}
-
-                &.c16 {--bg:#424242; --fg:#fff; --sel-bg: #6d6d6d; --sel-border: #1b1b1b}
-                &.c17 {--bg:#B71C1C; --fg:#fff; --sel-bg: #f05545; --sel-border: #7f0000}
-                &.c18 {--bg:#FF5722; --fg:#000; --sel-bg: #ff8a50; --sel-border: #c41c00}
-                &.c19 {--bg:#2E7D32; --fg:#fff; --sel-bg: #60ad5e; --sel-border: #005005}
-                &.c20 {--bg:#00838F; --fg:#000; --sel-bg: #4fb3bf; --sel-border: #005662}
-                &.c21 {--bg:#283593; --fg:#fff; --sel-bg: #5f5fc4; --sel-border: #001064}
-                &.c22 {--bg:#4A148C; --fg:#fff; --sel-bg: #7c43bd; --sel-border: #12005e}
-                &.c23 {--bg:#D81B60; --fg:#fff; --sel-bg: #ff5c8d; --sel-border: #a00037}
             }
         }
     }
