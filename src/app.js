@@ -418,7 +418,23 @@ async function updateGridCells(grid) {
 
         container.appendChild(tileElement);
     }
+
+    gridElement.style.visibility = "hidden";
     gridElement.hidden = false;
+
+    // Find widest column width by checking each column header's width
+    // FIXME: optimization: create one element with every word from every cell, one word per line, and measure its width
+    let columnWidth = 0;
+    for (let i = 0; i < gridChildElementsLUT.width - 1; i++) {
+        const header = gridChildElementsLUT.getColHeader(i);
+        columnWidth = Math.max(columnWidth, header.clientWidth);
+    }
+
+    gridElement.hidden = true;
+    gridElement.style.setProperty("--column-width", `${columnWidth}px`);
+    gridElement.style.visibility = "visible";
+    gridElement.hidden = false;
+
     if (cellToClick) {
         cellToClick.click();
         const gridViewElement = document.getElementById("grid-view");

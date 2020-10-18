@@ -214,9 +214,6 @@ body {
         user-select: none;
 
         #grid-view-grid {
-            --cell-width: max(10rem, 24px);
-            --cell-height: max(1.5rem, 24px);
-
             font-size: 0.8em;
 
             width: min-content;
@@ -229,7 +226,7 @@ body {
             display: grid;
             grid-template-columns: min-content;
             grid-template-rows: min-content;
-            grid-auto-columns: 1fr;
+            grid-auto-columns: var(--column-width, 1fr);
             grid-auto-rows: 1fr;
 
             &[hidden] {
