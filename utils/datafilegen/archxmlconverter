@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+
+import argparse
+from datafile import *
+import json
+import sys
+import re
+from datetime import datetime
+import os
+from pathlib import Path
+
+from lxml import etree
+
+
+class ArchXmlConverter:
+    def __init__(self, src):
+        # Using abspath to avoid symlink resolving
+        self.src = Path(os.path.abspath(src))
+        self.data_file = SdbvDataFile()
+
+
+    class GridLayout:
+        def __init__(self, width, height):
+            self.width = width
+            self.height = height
+            self.data = [[None]*width for _ in range(height)]
+
+        def place_row(self, attrs):
+            typ = attrs.get("type")
+            cell = {"type": typ} if typ != "EMPTY" else None
+
+            starty = int(attrs.get("starty"))
+            repeaty = int(attrs.get("repeaty", self.height))
+            startx = int(attrs.get("startx", "0"))
+            incrx = int(attrs.get("incrx", 1)) # FIXME: should be tile width
+            for y in range(starty, self.height, repeaty):
+                for x in range(startx, self.width, incrx):
+                    self.data[y][x] = cell
+
+        def place_col(self, attrs):
+            typ = attrs.get("type")
+            cell = {"type": typ} if typ != "EMPTY" else None
+
+            startx = int(attrs.get("startx"))
+            repeatx = int(attrs.get("repeatx", self.width))
+            starty = int(attrs.get("starty", 0))
+            incry = int(attrs.get("incry", 1)) # FIXME: should be tile height
+            for y in range(starty, self.height, incry):
+                for x in range(startx, self.width, repeatx):
+                    self.data[y][x] = cell
+
+    @staticmethod
+    def _fixed_layout_to_grid(layout):
+        grid = SdbvGrid()
+
+        grid.name = layout.get("name", None)
+
+        grid.colsRange = int(layout.get("width"))
+        grid.rowsRange = int(layout.get("height"))
+
+        grid.cells.fieldOrder = ["col", "row", "type"]
+
+        # FIXME: cell can have a name
+        grid.cells.fieldTemplates = {
+            "name": r"{type}",
+            "fullName": r"{type} X{col}Y{row}",
+            "color": r"{1}"
+        }
+
+        cellArray = [[None]*grid.colsRange for _ in range(grid.rowsRange)]
+
+        for element in sorted(layout.iterchildren("*"), key=lambda e: int(e.get("priority", "0"))):
+            typ = element.get("type")
+            cell = {"type": typ} if typ != "EMPTY" else None
+            if element.tag == "col":
+                startx = int(element.get("startx"))
+                repeatx = int(element.get("repeatx", grid.colsRange))
+                starty = int(element.get("starty", 0))
+                incry = int(element.get("incry", 1)) # FIXME: should be tile height
+                for y in range(starty, grid.rowsRange, incry):
+                    for x in range(startx, grid.colsRange, repeatx):
+                        cellArray[y][x] = cell
+            elif element.tag == "row":
+                starty = int(element.get("starty"))
+                repeaty = int(element.get("repeaty", grid.rowsRange))
+                startx = int(element.get("startx", "0"))
+                incrx = int(element.get("incrx", 1)) # FIXME: should be tile width
+                for y in range(starty, grid.rowsRange, repeaty):
+                    for x in range(startx, grid.colsRange, incrx):
+                        cellArray[y][x] = cell
+            elif element.tag == "single":
+                x = int(element.get("x"))
+                y = int(element.get("y"))
+                cellArray[y][x] = cell
+            elif element.tag == "fill":
+                cellArray = [[cell]*grid.colsRange for _ in range(grid.rowsRange)]
+            elif element.tag == "perimeter":
+                cellArray[0] = [cell]*grid.colsRange
+                cellArray[-1] = [cell]*grid.colsRange
+                for y in range(1, len(cellArray)-1):
+                    cellArray[y][0] = cell
+                    cellArray[y][-1] = cell
+            elif element.tag == "corners":
+                cellArray[0][0] = cell
+                cellArray[0][-1] = cell
+                cellArray[-1][0] = cell
+                cellArray[-1][-1] = cell
+
+        for x, y in zip(range(grid.colsRange), range(grid.rowsRange)):
+            if cellArray[y][x] is not None:
+                cell = cellArray[y][x].copy()
+                cell["col"] = x
+                cell["row"] = y
+                grid.cells.addCell(cell)
+
+        return grid
+
+
+    def _process_archxml(self):
+        parser = etree.XMLParser(remove_comments=True)
+        xml_tree = None
+        with open(self.src, "r") as file:
+            xml_tree = etree.parse(file, parser=parser, base_url=str(self.src))
+        xml_tree.xinclude()
+
+        self.data_file.setBuildDate(datetime.now())
+
+        layouts = xml_tree.find("//layout")
+        assert (layouts is not None)
+
+        layoutId = 0
+        for layout in layouts.iterchildren("fixed_layout"): # TODO: add auto_layout
+            grid = ArchXmlConverter._fixed_layout_to_grid(layout)
+            if grid.name is None:
+                grid.name = f"{layout.tag}_{layoutId}"
+            layoutId += 1
+
+            self.data_file.grids[grid.name] = grid
+
+
+    def convert(self):
+        self.data_file = SdbvDataFile()
+
+        self._process_archxml()
+
+        return self.data_file
+
+
+def fs_friendly_name(name, already_used_names=[]):
+    safe_name = re.sub("[^a-zA-Z0-9_-]", "_", name)
+    if safe_name in already_used_names:
+        match = re.fullmatch("(.*?)(?:_([1-9][0-9]*))?", safe_name)
+        assert(match is not None)
+        base = match.group(1)
+        number = match.group(2)
+        number = int(number) if number is not None else 0
+        while safe_name in already_used_names:
+            number += 1
+            safe_name = f"{base}_{number}"
+    return safe_name
+
+
+def run(src, out, readable_output=False):
+    converter = ArchXmlConverter(src)
+    data_file = converter.convert()
+
+    base_name = out.stem
+    ext = out.suffix
+    used_grid_names = set()
+    for name, grid in data_file.grids.items():
+       if name != "":
+           fs_name = fs_friendly_name(name, used_grid_names)
+           used_grid_names.add(fs_name)
+           grid_file_name = f"{base_name}.{fs_name}.data{ext}"
+       else:
+           grid_file_name = f"{base_name}.data{ext}"
+       grid.cells.data = SdbvImport(grid_file_name, grid.cells.data)
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    return data_file.writeFiles(out.name, out.parent, minimalOutput=(not readable_output))
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--readable-output", action="store_true", help="Use line breaks and indents in output JSON files.")
+    parser.add_argument("src", type=Path, help="Path to a source file.")
+    parser.add_argument("out", type=Path, help="Output data file path.")
+
+    args = parser.parse_args()
+    files = run(args.src, args.out, readable_output=args.readable_output)
+
+    for file in files:
+        print(file)
+
+
+if __name__ == "__main__":
+    main()
