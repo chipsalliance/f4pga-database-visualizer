@@ -1,4 +1,4 @@
-import "lodash";
+import {escape} from "lodash";
 import {MDCTabBar} from '@material/tab-bar';
 import {MDCRipple} from "@material/ripple";
 import {findMostContrastingColor, findNearestPaletteColor, firstColorWithContrast} from "./utils/colors";
@@ -502,7 +502,7 @@ async function loadData() {
     const errorHandler = (e) => {
         if (e instanceof XHRError) {
             new ErrorScreen({title: AppParams.appName, type: "user", message:
-                `Could not load database file: <code>${_.escape(AppParams.databaseFile)}</code></br>` +
+                `Could not load database file: <code>${escape(AppParams.databaseFile)}</code></br>` +
                 `Error: <strong>${e.message}<strong>`,
             }).show();
         } else {
