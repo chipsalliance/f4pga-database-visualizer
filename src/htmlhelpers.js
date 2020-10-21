@@ -16,6 +16,8 @@ export class DefinitionListBuilder {
         dt.innerText = term;
         if (definition instanceof Array)
             definition.forEach((el) => dd.appendChild(el));
+        else if (definition instanceof HTMLElement)
+            dd.appendChild(definition);
         else
             dd.innerText = definition;
         this.dl.appendChild(dt);
@@ -53,6 +55,8 @@ export class ListBuilder {
         let li = document.createElement("li");
         if (value instanceof Array)
             value.forEach((el) => li.appendChild(el));
+        else if (value instanceof HTMLElement)
+            li.appendChild(value);
         else
             li.innerText = value;
         this.l.appendChild(li);

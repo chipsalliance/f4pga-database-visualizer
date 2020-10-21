@@ -194,18 +194,48 @@ function tileDoubleClickEventHandler(event) {
     console.log("");
 }
 
-function updateDatabaseInfoView(name, description, version, buildDate, buildSources) {
+function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
     let databaseInfoElement = document.getElementById("database-info");
     databaseInfoElement.innerHTML = "";
 
+    let h;
+
     // Title
-    let h = document.createElement("h3");
-    h.innerText = name ? name : "Database";
-    databaseInfoElement.appendChild(h);
+    if (name) {
+        h = document.createElement("h3");
+        h.innerText = name;
+        databaseInfoElement.appendChild(h);
+    }
 
     // Description
     if (description) {
         renderDescription(databaseInfoElement, description);
+    }
+
+    // Available grids
+    if (gridsList.length > 1) {
+        h = document.createElement("h3");
+        h.innerText = "Available grids";
+        databaseInfoElement.appendChild(h);
+
+        let list = new HTMLHelpers.ListBuilder("ul");
+        const url = new URL(window.location);
+        url.hash = "";
+        for(const gridId of gridsList) {
+            const isCurrentGrid = (AppParams.gridId === gridId);
+            const el = document.createElement(isCurrentGrid ? "strong" : "a");
+            if (!isCurrentGrid) {
+                url.searchParams.set("grid", encodeURIComponent(gridId));
+                el.href = url.href;
+            }
+            if (gridId)
+                el.innerText = gridId;
+            else
+                el.innerHTML = `<em>[main grid]</em>`;
+
+            list.addEntry(el);
+        }
+        databaseInfoElement.appendChild(list.build());
     }
 
     // Generic database info
@@ -239,7 +269,7 @@ function updateDatabaseInfoView(name, description, version, buildDate, buildSour
         dlBuilder.addEntry("Sources", sources);
     }
     if (!dlBuilder.isEmpty()) {
-        if (description) {
+        if (description || (gridsList.length > 1)) {
             let h = document.createElement("h4");
             h.innerText = "Database metadata";
             databaseInfoElement.appendChild(h);
@@ -488,10 +518,11 @@ async function loadData() {
             db.getDescription(),
             db.getVersion(),
             db.getBuildDate(),
-            db.getBuildSources()
+            db.getBuildSources(),
+            db.getGridsList(),
         ])
-            .then(([name, description, version, buildDate, buildSources]) =>
-                    updateDatabaseInfoView(name, description, version, buildDate, buildSources))
+            .then(([name, description, version, buildDate, buildSources, gridsList]) =>
+                    updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList))
             .catch(errorHandler);
 
         const gridsList = await db.getGridsList();
