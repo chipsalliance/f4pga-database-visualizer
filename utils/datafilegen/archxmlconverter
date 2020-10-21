@@ -63,18 +63,24 @@ class ArchXmlConverter:
 
         grid.cells.fieldOrder = ["col", "row", "type"]
 
+        grid.cells.templateConsts = {
+            "COLORS": {
+                "EMPTY": None
+            }
+        }
         # FIXME: cell can have a name
         grid.cells.fieldTemplates = {
             "name": r"{type}",
             "fullName": r"{type} X{col}Y{row}",
-            "color": r"{1}"
+            "color": r"{get(COLORS, type)}",
         }
 
         cellArray = [[None]*width for _ in range(height)]
 
+        colorId = 0
         for element in sorted(layout.iterchildren("*"), key=lambda e: int(e.get("priority", "0"))):
             typ = element.get("type")
-            cell = {"type": typ} if typ != "EMPTY" else None
+            cell = {"type": typ}
             if element.tag == "col":
                 startx = int(element.get("startx"))
                 repeatx = int(element.get("repeatx", width))
@@ -108,6 +114,10 @@ class ArchXmlConverter:
                 cellArray[0][-1] = cell
                 cellArray[-1][0] = cell
                 cellArray[-1][-1] = cell
+
+            if typ not in grid.cells.templateConsts["COLORS"]:
+                grid.cells.templateConsts["COLORS"][typ] = colorId
+                colorId += 1
 
         for x, y in itertools.product(range(width), range(height)):
             if cellArray[y][x] is not None:
