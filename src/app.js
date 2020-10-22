@@ -144,7 +144,7 @@ function updateDatabaseInfoView(name, description, version, buildDate, buildSour
         const url = new URL(window.location);
         url.hash = "";
         for(const gridId of gridsList) {
-            const isCurrentGrid = (AppParams.gridId === gridId);
+            const isCurrentGrid = (AppParams.gridId === gridId) || (!gridsList.includes(Database.DEFAULT_GRID_ID) && (gridsList[0] === gridId));
             const el = document.createElement(isCurrentGrid ? "strong" : "a");
             if (!isCurrentGrid) {
                 url.searchParams.set("grid", encodeURIComponent(gridId));
@@ -410,9 +410,14 @@ async function loadData() {
 
         const gridsList = await db.getGridsList();
         let gridId = AppParams.gridId;
-        if (!gridsList.includes(gridId)) {
+        if (!gridId) {
+            gridId = Database.DEFAULT_GRID_ID;
+        } else if (!gridsList.includes(gridId)) {
             console.log(`Invalid grid name: ${gridId}`);
             gridId = Database.DEFAULT_GRID_ID;
+        }
+        if (!gridsList.includes(gridId)) {
+            gridId = gridsList[0];
         }
 
         db.getGrid(gridId).then(async (grid)=>{
