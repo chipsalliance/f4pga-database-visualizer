@@ -393,6 +393,20 @@ body {
                     &:first-child { margin-top: 0; }
                 }
 
+                var {
+                    font-family: monospace;
+                    font-style: normal;
+                }
+
+                ul {
+                    margin: 0 0 8px 0;
+                    padding: 0;
+                    list-style-position: inside;
+                    li {
+                        padding: 0;
+                    }
+                }
+
                 dl {
                     margin: 0 0 8px 0;
 
@@ -406,19 +420,6 @@ body {
                         display: block;
                         margin: 0 0 8px 1em;
                         &:last-child { margin-bottom: 0; }
-
-                        var {
-                            font-family: monospace;
-                            font-style: normal;
-                        }
-
-                        ul {
-                            margin: 0;
-                            padding: 0;
-                            list-style-position: inside;
-                            li {
-                            }
-                        }
                     }
                 }
             }
