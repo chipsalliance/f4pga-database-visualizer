@@ -371,7 +371,7 @@ async function updateGrid(grid) {
 async function updateGridCells(grid) {
     function isTileElement(element) {return element.classList.contains("tile");};
 
-    const COLORS_NUM = 19;
+    const COLORS_NUM = 24;
     const gridElement = document.getElementById("grid-view-grid");
     const [columnsRange, rowsRange] = [await grid.getColumnsRange(), await grid.getRowsRange()];
     const cells = await grid.getCells();

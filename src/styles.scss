@@ -221,7 +221,7 @@ body {
 
             position: relative;
             z-index: 0;
-            gap: 3px;
+            gap: 1px;
 
             display: grid;
             grid-template-columns: min-content;
@@ -264,7 +264,7 @@ body {
                 grid-column: 1;
                 left: 0px;
 
-                margin: -1px -2px -2px 0;
+                margin: -0px -1px -1px 0;
             }
 
             > .col-header {
@@ -274,7 +274,7 @@ body {
                 grid-column: calc(var(--x) + 2);
                 top: 0px;
 
-                margin: 0 -2px -2px -1px;
+                margin: 0 -1px -1px -0px;
             }
 
             > .corner-header {
@@ -286,7 +286,7 @@ body {
                 left: 0px;
                 top: 0px;
 
-                margin: 0 -2px -2px 0;
+                margin: 0 -1px -1px 0;
             }
 
             > .cell {
@@ -306,47 +306,74 @@ body {
 
             .tile {
                 display: flex;
+                grid-template: 100% / 100%;
                 justify-content: center;
                 align-items: center;
                 text-align: center;
                 text-overflow: ellipsis;
-                padding: 0 6px;
+                padding: 2px 6px;
                 // height lower than 24px causes huge performance drop, at least in Firefox
                 min-height: max(24px, 1.5em);
+                position: relative;
 
-                border: 2px solid transparent;
+                border: 1px solid $cl-gray-light;
 
                 background-color: var(--bg, #fff0);
                 color: var(--fg, $cl-gray);
                 cursor: pointer;
-                @include elevation.elevation(0);
+                // @include elevation.elevation(0);
 
-                &.active {
-                    background: linear-gradient(#fff4, #fff4), linear-gradient(var(--bg, #fff0), var(--bg, #fff0));
+                &::before {
+                    content: '';
+                    z-index: -1;
+                    position: absolute;
+                    left: -1px;
+                    right: -1px;
+                    top: -1px;
+                    bottom: -1px;
+                    visibility: hidden;
 
                     @include elevation.elevation(4);
-                    border-color: #0008;
+                    background-color: var(--sel-bg, #fff4);
+                    border-radius: inherit;
+                    border: 2px solid var(--sel-border, #0008);
                 }
 
-                &.c0  {--bg: #E53935; --fg: #fff;}
-                &.c1  {--bg: #D81B60; --fg: #fff;}
-                &.c2  {--bg: #8E24AA; --fg: #fff;}
-                &.c3  {--bg: #5E35B1; --fg: #fff;}
-                &.c4  {--bg: #3949AB; --fg: #fff;}
-                &.c5  {--bg: #1E88E5; --fg: #000;}
-                &.c6  {--bg: #039BE5; --fg: #000;}
-                &.c7  {--bg: #00ACC1; --fg: #000;}
-                &.c8  {--bg: #00897B; --fg: #fff;}
-                &.c9  {--bg: #43A047; --fg: #fff;}
-                &.c10 {--bg: #7CB342; --fg: #000;}
-                &.c11 {--bg: #C0CA33; --fg: #000;}
-                &.c12 {--bg: #FDD835; --fg: #000;}
-                &.c13 {--bg: #FFB300; --fg: #000;}
-                &.c14 {--bg: #FB8C00; --fg: #000;}
-                &.c15 {--bg: #F4511E; --fg: #fff;}
-                &.c16 {--bg: #6D4C41; --fg: #fff;}
-                &.c17 {--bg: #757575; --fg: #fff;}
-                &.c18 {--bg: #546E7A; --fg: #fff;}
+                &.active {
+                    // @include elevation.elevation(4);
+                    border-color: var(--bg, #0000);
+
+                    &::before {
+                        visibility: visible;
+                    }
+                }
+
+                &.c0  {--bg:#757575; --fg:#fff; --sel-bg: #a4a4a4; --sel-border: #494949}
+                &.c1  {--bg:#E53935; --fg:#000; --sel-bg: #ff6f60; --sel-border: #ab000d}
+                &.c2  {--bg:#FB8C00; --fg:#000; --sel-bg: #ffbd45; --sel-border: #c25e00}
+                &.c3  {--bg:#689F38; --fg:#000; --sel-bg: #99d066; --sel-border: #387002}
+                &.c4  {--bg:#00ACC1; --fg:#000; --sel-bg: #5ddef4; --sel-border: #007c91}
+                &.c5  {--bg:#1565C0; --fg:#fff; --sel-bg: #5e92f3; --sel-border: #003c8f}
+                &.c6  {--bg:#5E35B1; --fg:#fff; --sel-bg: #9162e4; --sel-border: #280680}
+                &.c7  {--bg:#F06292; --fg:#000; --sel-bg: #ff94c2; --sel-border: #ba2d65}
+
+                &.c8  {--bg:#9E9E9E; --fg:#000; --sel-bg: #cfcfcf; --sel-border: #707070}
+                &.c9  {--bg:#E57373; --fg:#000; --sel-bg: #ffa4a2; --sel-border: #af4448}
+                &.c10 {--bg:#FBC02D; --fg:#000; --sel-bg: #fff263; --sel-border: #c49000}
+                &.c11 {--bg:#8BC34A; --fg:#000; --sel-bg: #bef67a; --sel-border: #5a9216}
+                &.c12 {--bg:#4DD0E1; --fg:#000; --sel-bg: #88ffff; --sel-border: #009faf}
+                &.c13 {--bg:#039BE5; --fg:#000; --sel-bg: #63ccff; --sel-border: #006db3}
+                &.c14 {--bg:#9575CD; --fg:#000; --sel-bg: #c7a4ff; --sel-border: #65499c}
+                &.c15 {--bg:#F48FB1; --fg:#000; --sel-bg: #ffc1e3; --sel-border: #bf5f82}
+
+                &.c16 {--bg:#424242; --fg:#fff; --sel-bg: #6d6d6d; --sel-border: #1b1b1b}
+                &.c17 {--bg:#B71C1C; --fg:#fff; --sel-bg: #f05545; --sel-border: #7f0000}
+                &.c18 {--bg:#FF5722; --fg:#000; --sel-bg: #ff8a50; --sel-border: #c41c00}
+                &.c19 {--bg:#2E7D32; --fg:#fff; --sel-bg: #60ad5e; --sel-border: #005005}
+                &.c20 {--bg:#00838F; --fg:#000; --sel-bg: #4fb3bf; --sel-border: #005662}
+                &.c21 {--bg:#283593; --fg:#fff; --sel-bg: #5f5fc4; --sel-border: #001064}
+                &.c22 {--bg:#4A148C; --fg:#fff; --sel-bg: #7c43bd; --sel-border: #12005e}
+                &.c23 {--bg:#D81B60; --fg:#fff; --sel-bg: #ff5c8d; --sel-border: #a00037}
             }
         }
     }
