@@ -60,17 +60,17 @@ class PrjxrayDbConverter:
         # Coloring rules from https://github.com/SymbiFlow/prjxray/tree/master/htmlgen
         color_map = [
             (r"NULL|.*BRK.*", None),
-            (r".*IO.*", "#757575"),
-            (r"INT_INTERFACE_[LR]|DSP_[LR]", "#AB47BC"),
-            (r"BRAM_INT_INTERFACE_[LR]|BRAM_[LR]", "#4DD0E1"),
-            (r"HCLK_[LR]", "#D4E157"),
-            (r".*CLK.*", "#8BC34A"),
-            (r".*CMT.*", "#43A047"),
-            (r"CLBLM_[LR]", "#FF5722"),
-            (r"CLBLL_[LR]", "#FFC107"),
-            (r"INT_L|INT_R", "#1E88E5"),
-            (r".*INT_FEEDTHRU.*", "#1565C0"),
-            (r".*", "#BDBDBD")
+            (r".*IO.*", Colors.LIGHT_GRAY),
+            (r"INT_INTERFACE_[LR]|DSP_[LR]", Colors.PURPLE),
+            (r"BRAM_INT_INTERFACE_[LR]|BRAM_[LR]", Colors.CYAN),
+            (r"HCLK_[LR]", Colors.LIGHT_GREEN),
+            (r".*CLK.*", Colors.GREEN),
+            (r".*CMT.*", Colors.DARK_GREEN),
+            (r"CLBLM_[LR]", Colors.RED),
+            (r"CLBLL_[LR]", Colors.YELLOW),
+            (r"INT_L|INT_R", Colors.LIGHT_BLUE),
+            (r".*INT_FEEDTHRU.*", Colors.BLUE),
+            (r".*", Colors.GRAY)
         ]
         color_map = [(re.compile(pat), color) for pat,color in color_map]
 

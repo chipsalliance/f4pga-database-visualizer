@@ -6,6 +6,36 @@ import os
 from pathlib import Path
 
 
+# Color indexes from .color-* classes in grid-view.scss
+class Colors:
+    GRAY   = 0
+    RED    = 1
+    YELLOW = 2
+    GREEN  = 3
+    CYAN   = 4
+    BLUE   = 5
+    PURPLE = 6
+    PINK   = 7
+
+    LIGHT_GRAY   = 8+0
+    LIGHT_RED    = 8+1
+    LIGHT_YELLOW = 8+2
+    LIGHT_GREEN  = 8+3
+    LIGHT_CYAN   = 8+4
+    LIGHT_BLUE   = 8+5
+    LIGHT_PURPLE = 8+6
+    LIGHT_PINK   = 8+7
+
+    DARK_GRAY   = 16+0
+    DARK_RED    = 16+1
+    DARK_YELLOW = 16+2
+    DARK_GREEN  = 16+3
+    DARK_CYAN   = 16+4
+    DARK_BLUE   = 16+5
+    DARK_PURPLE = 16+6
+    DARK_PINK   = 16+7
+
+
 class SdbvImport:
     def __init__(self, fileName, data):
         self.fileName = fileName
@@ -152,4 +182,4 @@ class SdbvDataFile:
         return files
 
 
-__all__ = ["SdbvDataFile", "SdbvGrid", "SdbvGridCells", "SdbvImport"]
+__all__ = ["Colors", "SdbvDataFile", "SdbvGrid", "SdbvGridCells", "SdbvImport"]
