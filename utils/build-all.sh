@@ -62,9 +62,12 @@ for chip_dir in $PRJXRAYDB_DIR/*/xc*/; do
 done
 
 #─────────────────────────────────────────────────────────────────────────────
-# Process SymbiFlow Arch Defs' arch.xml entries
+# Copy example data file generated from SymbiFlow Arch Defs' arch.xml
 
-# TODO
+mkdir -p $DATA_OUT_DIR/symbiflow-arch-defs
+cp -r $TOP/examples/ice40 $DATA_OUT_DIR/symbiflow-arch-defs/ice40
+data_files_name_list+=("symbiflow-arch-defs/ice40 (generated from arch.xml file)")
+data_files_path_list+=("$DATA_OUT_DIR/symbiflow-arch-defs/ice40/ice40.json")
 
 #─────────────────────────────────────────────────────────────────────────────
 # Generate config
