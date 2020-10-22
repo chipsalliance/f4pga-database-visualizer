@@ -290,8 +290,8 @@ body {
             }
 
             > .cell {
-                grid-row: calc(var(--y) + 2);
-                grid-column: calc(var(--x) + 2);
+                grid-row: calc(var(--y) + 2) / calc(var(--y) + 2 + var(--h, 1)) ;
+                grid-column: calc(var(--x) + 2) / calc(var(--x) + 2 + var(--w, 1));
                 border-radius: 4px;
             }
 

@@ -428,10 +428,14 @@ async function updateGridCells(grid) {
                 container.classList.add("cell");
                 container.style.setProperty("--x", x.toString());
                 container.style.setProperty("--y", y.toString());
+                container.style.setProperty("--w", (cell.width || 1).toString());
+                container.style.setProperty("--h", (cell.height || 1).toString());
                 gridChildElementsLUT.setCell(x, y, container);
                 cellElementAtXY.classList.remove("cell");
                 cellElementAtXY.style.removeProperty("--x");
                 cellElementAtXY.style.removeProperty("--y");
+                cellElementAtXY.style.removeProperty("--w");
+                cellElementAtXY.style.removeProperty("--h");
                 // FIXME: do not insert elements one by one. Bulk-insert all elements when everything is created
                 gridElement.replaceChild(container, cellElementAtXY);
                 container.appendChild(cellElementAtXY);
@@ -442,6 +446,8 @@ async function updateGridCells(grid) {
         } else {
             tileElement.style.setProperty("--x", x.toString());
             tileElement.style.setProperty("--y", y.toString());
+            tileElement.style.setProperty("--w", (cell.width || 1).toString());
+            tileElement.style.setProperty("--h", (cell.height || 1).toString());
             tileElement.classList.add("cell");
             gridChildElementsLUT.setCell(x, y, tileElement);
         }
