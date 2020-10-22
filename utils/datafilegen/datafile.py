@@ -107,7 +107,7 @@ class SdbvDataFile:
         self.buildDate = None;
         self.buildSources = None
         self.description = None
-        self.grids = {"": SdbvGrid()}
+        self.grids = {}
 
     def setBuildDate(self, dt):
         if isinstance(dt, datetime):
