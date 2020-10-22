@@ -19,6 +19,7 @@ class ArchXmlConverter:
         self.src = Path(os.path.abspath(src))
         self.data_file = SdbvDataFile()
 
+        self.pb_types = {}
 
     class GridLayout:
         def __init__(self, width, height):
@@ -50,109 +51,119 @@ class ArchXmlConverter:
                 for x in range(startx, self.width, repeatx):
                     self.data[y][x] = cell
 
-    @staticmethod
-    def _fixed_layout_to_grid(layout):
-        grid = SdbvGrid()
-
-        grid.name = layout.get("name", None)
-
-        width = int(layout.get("width"))
-        height = int(layout.get("height"))
-        grid.colsRange = width - 1
-        grid.rowsRange = height - 1
-
-        grid.cells.fieldOrder = ["col", "row", "type"]
-
-        grid.cells.templateConsts = {
-            "COLORS": {
-                "EMPTY": None
+    def _process_complex_block_list(self, tree):
+        for pb_type in tree.iterchildren("pb_type"):
+            name = pb_type.get("name")
+            width = pb_type.get("width", 1)
+            height = pb_type.get("height", 1)
+            self.pb_types[name] = {
+                "width": width,
+                "height": height,
             }
-        }
-        # FIXME: cell can have a name
-        grid.cells.fieldTemplates = {
-            "name": r"{type}",
-            "fullName": r"{type} X{col}Y{row}",
-            "color": r"{get(COLORS, type)}",
-        }
 
-        cellArray = [[None]*width for _ in range(height)]
+    def _process_layout_list(self, tree):
+        for layoutId, layout in enumerate(tree.iterchildren("fixed_layout")): # TODO: add auto_layout
+            grid = SdbvGrid()
 
-        colorId = 0
-        for element in sorted(layout.iterchildren("*"), key=lambda e: int(e.get("priority", "0"))):
-            typ = element.get("type")
-            cell = {"type": typ}
-            if element.tag == "col":
-                startx = int(element.get("startx"))
-                repeatx = int(element.get("repeatx", width))
-                starty = int(element.get("starty", 0))
-                incry = int(element.get("incry", 1)) # FIXME: should be tile height
-                for y in range(starty, height, incry):
-                    for x in range(startx, width, repeatx):
-                        cellArray[y][x] = cell
-            elif element.tag == "row":
-                starty = int(element.get("starty"))
-                repeaty = int(element.get("repeaty", height))
-                startx = int(element.get("startx", "0"))
-                incrx = int(element.get("incrx", 1)) # FIXME: should be tile width
-                for y in range(starty, height, repeaty):
-                    for x in range(startx, width, incrx):
-                        cellArray[y][x] = cell
-            elif element.tag == "single":
-                x = int(element.get("x"))
-                y = int(element.get("y"))
-                cellArray[y][x] = cell
-            elif element.tag == "fill":
-                cellArray = [[cell]*width for _ in range(height)]
-            elif element.tag == "perimeter":
-                cellArray[0] = [cell]*width
-                cellArray[-1] = [cell]*width
-                for y in range(1, len(cellArray)-1):
-                    cellArray[y][0] = cell
-                    cellArray[y][-1] = cell
-            elif element.tag == "corners":
-                cellArray[0][0] = cell
-                cellArray[0][-1] = cell
-                cellArray[-1][0] = cell
-                cellArray[-1][-1] = cell
+            grid.name = layout.get("name", f"{layout.tag}_{layoutId}")
 
-            if typ not in grid.cells.templateConsts["COLORS"]:
-                grid.cells.templateConsts["COLORS"][typ] = colorId
-                colorId += 1
+            width = int(layout.get("width"))
+            height = int(layout.get("height"))
+            grid.colsRange = width - 1
+            grid.rowsRange = height - 1
 
-        for x, y in itertools.product(range(width), range(height)):
-            if cellArray[y][x] is not None:
-                cell = cellArray[y][x].copy()
-                cell["col"] = x
-                cell["row"] = y
-                grid.cells.addCell(cell)
+            grid.cells.fieldOrder = ["col", "row", "width", "height", "type"]
 
-        return grid
+            grid.cells.templateConsts = {
+                "COLORS": {
+                    "EMPTY": None
+                }
+            }
+            # FIXME: cell can have a name
+            grid.cells.fieldTemplates = {
+                "name": r"{type}",
+                "fullName": r"{type} X{col}Y{row}",
+                "color": r"{get(COLORS, type)}",
+            }
 
+            cellArray = [[None]*width for _ in range(height)]
+
+            colorId = 0
+            for element in sorted(layout.iterchildren("*"), key=lambda e: int(e.get("priority", "0"))):
+                typ = element.get("type")
+                cell = {
+                    "type": typ,
+                    "width": int(self.pb_types.get(typ, {}).get("width", 1)),
+                    "height": int(self.pb_types.get(typ, {}).get("height", 1))
+                }
+                if element.tag == "col":
+                    startx = int(element.get("startx"))
+                    repeatx = int(element.get("repeatx", width))
+                    starty = int(element.get("starty", 0))
+                    incry = int(element.get("incry", cell["height"]))
+                    for y in range(starty, height, incry):
+                        for x in range(startx, width, repeatx):
+                            cellArray[y][x] = cell
+                elif element.tag == "row":
+                    starty = int(element.get("starty"))
+                    repeaty = int(element.get("repeaty", height))
+                    startx = int(element.get("startx", "0"))
+                    incrx = int(element.get("incrx", cell["width"]))
+                    for y in range(starty, height, repeaty):
+                        for x in range(startx, width, incrx):
+                            cellArray[y][x] = cell
+                elif element.tag == "single":
+                    x = int(element.get("x"))
+                    y = int(element.get("y"))
+                    cellArray[y][x] = cell
+                elif element.tag == "fill":
+                    cellArray = [[cell]*width for _ in range(height)]
+                elif element.tag == "perimeter":
+                    cellArray[0] = [cell]*width
+                    cellArray[-1] = [cell]*width
+                    for y in range(1, len(cellArray)-1):
+                        cellArray[y][0] = cell
+                        cellArray[y][-1] = cell
+                elif element.tag == "corners":
+                    cellArray[0][0] = cell
+                    cellArray[0][-1] = cell
+                    cellArray[-1][0] = cell
+                    cellArray[-1][-1] = cell
+
+                if typ not in grid.cells.templateConsts["COLORS"]:
+                    grid.cells.templateConsts["COLORS"][typ] = colorId
+                    colorId += 1
+
+            for x, y in itertools.product(range(width), range(height)):
+                if cellArray[y][x] is not None:
+                    cell = cellArray[y][x].copy()
+                    cell["col"] = x
+                    cell["row"] = y
+                    grid.cells.addCell(cell)
+
+            self.data_file.grids[grid.name] = grid
 
     def _process_archxml(self):
         parser = etree.XMLParser(remove_comments=True)
         xml_tree = None
         with open(self.src, "r") as file:
             xml_tree = etree.parse(file, parser=parser, base_url=str(self.src))
-        xml_tree.xinclude()
+            xml_tree.xinclude()
 
-        self.data_file.setBuildDate(datetime.now())
+        architecture_tree = xml_tree.getroot()
+        assert(architecture_tree.tag == "architecture")
 
-        layouts = xml_tree.find("//layout")
-        assert (layouts is not None)
+        cbl_tree = architecture_tree.find("complexblocklist")
+        assert (cbl_tree is not None)
+        self._process_complex_block_list(cbl_tree)
 
-        layoutId = 0
-        for layout in layouts.iterchildren("fixed_layout"): # TODO: add auto_layout
-            grid = ArchXmlConverter._fixed_layout_to_grid(layout)
-            if grid.name is None:
-                grid.name = f"{layout.tag}_{layoutId}"
-            layoutId += 1
-
-            self.data_file.grids[grid.name] = grid
-
+        layout_tree = architecture_tree.find("layout")
+        assert (layout_tree is not None)
+        self._process_layout_list(layout_tree)
 
     def convert(self):
         self.data_file = SdbvDataFile()
+        self.data_file.setBuildDate(datetime.now())
 
         self._process_archxml()
 
@@ -200,6 +211,7 @@ def main():
     parser.add_argument("out", type=Path, help="Output data file path.")
 
     args = parser.parse_args()
+
     files = run(args.src, args.out, readable_output=args.readable_output)
 
     for file in files:
