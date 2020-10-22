@@ -1,0 +1,1204 @@
+{
+  "buildDate": "2020-10-22T22:39:08",
+  "grids": {
+    "lp384-cm36": {
+      "name": "lp384-cm36",
+      "colsRange": 11,
+      "rowsRange": 13,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1
+          }
+        },
+        "data": {
+          "@import": "ice40.lp384-cm36.data.json"
+        }
+      }
+    },
+    "lp384-cm49": {
+      "name": "lp384-cm49",
+      "colsRange": 11,
+      "rowsRange": 13,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1
+          }
+        },
+        "data": {
+          "@import": "ice40.lp384-cm49.data.json"
+        }
+      }
+    },
+    "lp384-qn32": {
+      "name": "lp384-qn32",
+      "colsRange": 11,
+      "rowsRange": 13,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1
+          }
+        },
+        "data": {
+          "@import": "ice40.lp384-qn32.data.json"
+        }
+      }
+    },
+    "lp1k-cb121": {
+      "name": "lp1k-cb121",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-cb121.data.json"
+        }
+      }
+    },
+    "lp1k-cb132": {
+      "name": "lp1k-cb132",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-cb132.data.json"
+        }
+      }
+    },
+    "lp1k-cb81": {
+      "name": "lp1k-cb81",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-cb81.data.json"
+        }
+      }
+    },
+    "lp1k-cm121": {
+      "name": "lp1k-cm121",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-cm121.data.json"
+        }
+      }
+    },
+    "lp1k-cm36": {
+      "name": "lp1k-cm36",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-cm36.data.json"
+        }
+      }
+    },
+    "lp1k-cm49": {
+      "name": "lp1k-cm49",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-cm49.data.json"
+        }
+      }
+    },
+    "lp1k-cm81": {
+      "name": "lp1k-cm81",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-cm81.data.json"
+        }
+      }
+    },
+    "lp1k-qn84": {
+      "name": "lp1k-qn84",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-qn84.data.json"
+        }
+      }
+    },
+    "lp1k-swg16tr": {
+      "name": "lp1k-swg16tr",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-swg16tr.data.json"
+        }
+      }
+    },
+    "lp1k-tq144": {
+      "name": "lp1k-tq144",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-tq144.data.json"
+        }
+      }
+    },
+    "lp1k-vq100": {
+      "name": "lp1k-vq100",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp1k-vq100.data.json"
+        }
+      }
+    },
+    "lp8k-bg121": {
+      "name": "lp8k-bg121",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp8k-bg121.data.json"
+        }
+      }
+    },
+    "lp8k-cb132": {
+      "name": "lp8k-cb132",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp8k-cb132.data.json"
+        }
+      }
+    },
+    "lp8k-cm121": {
+      "name": "lp8k-cm121",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp8k-cm121.data.json"
+        }
+      }
+    },
+    "lp8k-cm225": {
+      "name": "lp8k-cm225",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp8k-cm225.data.json"
+        }
+      }
+    },
+    "lp8k-cm81": {
+      "name": "lp8k-cm81",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp8k-cm81.data.json"
+        }
+      }
+    },
+    "lp8k-ct256": {
+      "name": "lp8k-ct256",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lp8k-ct256.data.json"
+        }
+      }
+    },
+    "lm4k-cm49": {
+      "name": "lm4k-cm49",
+      "colsRange": 29,
+      "rowsRange": 25,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.lm4k-cm49.data.json"
+        }
+      }
+    },
+    "up5k-sg48": {
+      "name": "up5k-sg48",
+      "colsRange": 29,
+      "rowsRange": 35,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "DSP": 0,
+            "PIO": 1,
+            "PLB": 2,
+            "RAM": 3
+          }
+        },
+        "data": {
+          "@import": "ice40.up5k-sg48.data.json"
+        }
+      }
+    },
+    "up5k-uwg30": {
+      "name": "up5k-uwg30",
+      "colsRange": 29,
+      "rowsRange": 35,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "DSP": 0,
+            "PIO": 1,
+            "PLB": 2,
+            "RAM": 3
+          }
+        },
+        "data": {
+          "@import": "ice40.up5k-uwg30.data.json"
+        }
+      }
+    },
+    "hx1k-cb121": {
+      "name": "hx1k-cb121",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-cb121.data.json"
+        }
+      }
+    },
+    "hx1k-cb132": {
+      "name": "hx1k-cb132",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-cb132.data.json"
+        }
+      }
+    },
+    "hx1k-cb81": {
+      "name": "hx1k-cb81",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-cb81.data.json"
+        }
+      }
+    },
+    "hx1k-cm121": {
+      "name": "hx1k-cm121",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-cm121.data.json"
+        }
+      }
+    },
+    "hx1k-cm36": {
+      "name": "hx1k-cm36",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-cm36.data.json"
+        }
+      }
+    },
+    "hx1k-cm49": {
+      "name": "hx1k-cm49",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-cm49.data.json"
+        }
+      }
+    },
+    "hx1k-cm81": {
+      "name": "hx1k-cm81",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-cm81.data.json"
+        }
+      }
+    },
+    "hx1k-qn84": {
+      "name": "hx1k-qn84",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-qn84.data.json"
+        }
+      }
+    },
+    "hx1k-swg16tr": {
+      "name": "hx1k-swg16tr",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-swg16tr.data.json"
+        }
+      }
+    },
+    "hx1k-tq144": {
+      "name": "hx1k-tq144",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-tq144.data.json"
+        }
+      }
+    },
+    "hx1k-vq100": {
+      "name": "hx1k-vq100",
+      "colsRange": 17,
+      "rowsRange": 21,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx1k-vq100.data.json"
+        }
+      }
+    },
+    "hx8k-bg121": {
+      "name": "hx8k-bg121",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx8k-bg121.data.json"
+        }
+      }
+    },
+    "hx8k-cb132": {
+      "name": "hx8k-cb132",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx8k-cb132.data.json"
+        }
+      }
+    },
+    "hx8k-cm121": {
+      "name": "hx8k-cm121",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx8k-cm121.data.json"
+        }
+      }
+    },
+    "hx8k-cm225": {
+      "name": "hx8k-cm225",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx8k-cm225.data.json"
+        }
+      }
+    },
+    "hx8k-cm81": {
+      "name": "hx8k-cm81",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx8k-cm81.data.json"
+        }
+      }
+    },
+    "hx8k-ct256": {
+      "name": "hx8k-ct256",
+      "colsRange": 37,
+      "rowsRange": 37,
+      "cells": {
+        "fieldOrder": [
+          "col",
+          "row",
+          "width",
+          "height",
+          "type"
+        ],
+        "fieldTemplates": {
+          "name": "{type}",
+          "fullName": "{type} X{col}Y{row}",
+          "color": "{get(COLORS, type)}"
+        },
+        "templateConsts": {
+          "COLORS": {
+            "EMPTY": null,
+            "PIO": 0,
+            "PLB": 1,
+            "RAM": 2
+          }
+        },
+        "data": {
+          "@import": "ice40.hx8k-ct256.data.json"
+        }
+      }
+    }
+  }
+}

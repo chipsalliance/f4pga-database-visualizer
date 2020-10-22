@@ -47,6 +47,10 @@
   {
    "name": "zynq7 (xc7z020clg484-1)",
    "url": "data/prjxraydb/zynq7/xc7z020clg484-1.json"
+  },
+  {
+   "name": "symbiflow-arch-defs/ice40 (generated from arch.xml file)",
+   "url": "data/symbiflow-arch-defs/ice40/ice40.json"
   }
  ]
 }
