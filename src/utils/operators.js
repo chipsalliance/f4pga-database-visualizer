@@ -1,3 +1,5 @@
+import {isNumber} from "lodash";
+
 export const EqualSymbol = Symbol("Operators.isEqual");
 
 /**
@@ -13,5 +15,5 @@ export function isEqual(a, b) {
         return a[EqualSymbol](b);
     if ((b instanceof Object) && (b[EqualSymbol] instanceof Function))
         return b[EqualSymbol](a);
-    return ((a === b) || (isNaN(a) && isNaN(b)))
+    return ((a === b) || (isNumber(a) && isNumber(b) && isNaN(a) && isNaN(b)))
 }
