@@ -25,8 +25,8 @@ export class Component {
     }
 
     update(properties={}) {
-        let changedProperties = {};
         if (this.element) {
+            let changedProperties = {};
             for (const [property, value] of Object.entries(properties)) {
                 const oldValue = this._properties[property];
                 if ((value !== undefined) && !isEqual(value, oldValue)) {
@@ -34,11 +34,13 @@ export class Component {
                 }
             }
             this._updateElement(changedProperties, this._element);
+            for (const [property, value] of Object.entries(changedProperties)) {
+                this._properties[property] = value;
+            }
         } else {
-            changedProperties = properties;
-        }
-        for (const [property, value] of Object.entries(changedProperties)) {
-            this._properties[property] = value;
+            for (const [property, value] of Object.entries(properties)) {
+                this._initialProperties[property] = value;
+            }
         }
     }
 }
