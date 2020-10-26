@@ -28,6 +28,7 @@ class TasksSequenceRunner {
                 }
                 task.func(nextDataItem.value, self);
             } else {
+                self.tasksList.shift();
                 task.func(self);
             }
             setTimeout(callback, 0, self);
