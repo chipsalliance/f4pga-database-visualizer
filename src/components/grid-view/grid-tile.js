@@ -19,6 +19,11 @@ function updateStyleProperty(element, property, value) {
 export class GridTile extends Component {
     constructor(properties) {
         super(properties);
+        this._initDefaultProperties();
+        this._colorIndex = null;
+    }
+
+    _initDefaultProperties() {
         this._properties = {
             text:    null,
             title:   null,
@@ -27,11 +32,9 @@ export class GridTile extends Component {
             column:  null,
             width:   1,
             height:  1,
-            dataId:  null, // TODO: remove
             active:  false,
             onClick: null,
         };
-        this._colorIndex = null;
     }
 
     get column() { return this._properties.column; }
@@ -43,12 +46,22 @@ export class GridTile extends Component {
         }
     }
 
+    disposeElement() {
+        if (this._element) {
+            this._element.remove();
+            this._element = null;
+            this._initialProperties = this._properties;
+            this._initDefaultProperties();
+        }
+    }
+
     _buildElement() {
         const element = document.createElement("div");
         element.classList.add("grid-tile");
         element.addEventListener("click", this._onClick.bind(this));
         return element;
     }
+
     _updateElement(properties, element) {
         for (const [property, value] of Object.entries(properties)) {
             switch(property) {
@@ -83,7 +96,6 @@ export class GridTile extends Component {
                 case "column": updateStyleProperty(element, "--column", value); break;
                 case "width":  updateStyleProperty(element, "--width",  value); break;
                 case "height": updateStyleProperty(element, "--height", value); break;
-                case "dataId": element.setAttribute("data-id", value.toString()); break;
                 case "active": element.classList.toggle("active", !!value); break;
                 case "onClick": break;
             }

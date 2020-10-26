@@ -2,22 +2,32 @@ import "./grid-view.scss";
 import {Component} from "../component";
 import {GridColumnHeader, GridCornerHeader, GridRowHeader} from "./grid-header";
 import {GridTile} from "./grid-tile";
-import {EqualSymbol} from "../../utils/operators";
+import {EqualSymbol, isEqual} from "../../utils/operators";
 
 class TasksSequenceRunner {
     constructor() {
         this.tasksList = [];
         this.cancelRequested = false;
         this.isRunning = false;
+        this.taskController = {
+            runner: this,
+            get cancelRequested() { return (this.runner.cancelRequested || this.runner.tasksList[0].cancelled); }
+        };
     }
 
     runNext() {
         function callback(self) {
             const task = self.tasksList[0];
             if (task === undefined) {
+                // No more tasks
                 self.isRunning = false;
                 self.cancelRequested = false;
                 return;
+            }
+            if (task.cancelled) {
+                // Cancelled task, retry with next task
+                self.tasksList.shift();
+                return callback(self);
             }
             if (task.data) {
                 const nextDataItem = task.data.next();
@@ -26,23 +36,30 @@ class TasksSequenceRunner {
                     self.tasksList.shift();
                     return callback(self);
                 }
-                task.func(nextDataItem.value, self);
+                task.func(nextDataItem.value, self.taskController);
             } else {
                 self.tasksList.shift();
-                task.func(self);
+                task.func(self.taskController);
+            }
+            if (self.cancelRequested) {
+                self.isRunning = false;
+                self.cancelRequested = false;
+                return
             }
             setTimeout(callback, 0, self);
         };
+        this.cancelRequested = false;
         setTimeout(callback, 0, this);
     }
 
-    scheduleTasks(taskFunc, dataIterator) {
+    schedule(taskFunc, dataIterator) {
         if (dataIterator instanceof Array) {
             dataIterator = dataIterator.values();
         }
         const task = {
             func: taskFunc,
             data: dataIterator,
+            cancelled: false,
         };
         this.tasksList.push(task);
 
@@ -50,25 +67,57 @@ class TasksSequenceRunner {
             this.isRunning = true;
             setTimeout(this.runNext.bind(this), 0);
         }
+
+        return task;
     }
 
-    cancel() {
-        this.cancelRequested = true;
-        this.tasksList = [];
+    cancel(task=null) {
+        if (!this.isRunning) {
+            return;
+        }
+        if (task) {
+            task.cancelled = true;
+        } else {
+            this.cancelRequested = true;
+            this.tasksList = [];
+        }
     }
-}
+};
 
-class Coordinate {
-    constructor(column, row) {
-        this.column = column;
-        this.row = row;
+class Coordinate extends Array {
+    constructor(x, y) {
+        super(2);
+        this.x = x;
+        this.y = y;
     }
+
+    get x() { return this[0]; };
+    get y() { return this[1]; };
+    set x(v) { this[0] = v; };
+    set y(v) { this[1] = v; };
 
     [EqualSymbol](other) {
         return ((other instanceof Coordinate)
-                && (other.column === this.column)
-                && (other.row == this.row));
+                && (other.x === this.x)
+                && (other.y == this.y));
     };
+}
+
+// Generates all integer coordinates located inside a rectangle described by topLeft corner and bottomRight corner
+function* rectGen(topLeft, bottomRight) {
+    let tl = [Math.min(topLeft[0], bottomRight[0]), Math.min(topLeft[1], bottomRight[1])];
+    let br = [Math.max(topLeft[0], bottomRight[0]), Math.max(topLeft[1], bottomRight[1])];
+    for (let x = tl[0]; x <= br[0]; x++) {
+        for (let y = tl[1]; y <= br[1]; y++) {
+            yield new Coordinate(x, y);
+        }
+    }
+}
+
+function* multiGen(...generators) {
+    for (const generator of generators) {
+        yield* generator;
+    }
 }
 
 class Array2D extends Array {
@@ -107,24 +156,146 @@ export class GridView extends Component {
         this._data = null;
         this._gridElement = null;
         this._tasks = new TasksSequenceRunner();
+        this._loadCellsTask = null;
+        this._tilesOffset = null;
+        this._tilesStride = null;
+
+        this._viewportChangedTimeout = null;
+        this._viewportTlTile = null;
+        this._viewportBLTile = null;
     }
 
     setActiveCell(column, row, show=false) {
-        this._tasks.scheduleTasks((runner) => {
-            const activeCell = ((column === undefined) || (row === undefined)) ? null : new Coordinate(column, row);
-            this.update({_activeCell: activeCell});
-            if (show && activeCell != null && this.element) {
+        const activeCell = ((column === undefined) || (row === undefined)) ? null : new Coordinate(column+1, row+1);
+        if (show && activeCell != null && this.element) {
+            this._tasks.schedule(this._loadCellsTaskFunc.bind(this), [[activeCell]])
+            this._tasks.schedule((controller) => {
                 const tileElement = this._children.get(column + 1, row + 1).element;
                 const scrollX = tileElement.offsetLeft - (this.element.offsetWidth - tileElement.offsetWidth) / 2;
                 const scrollY = tileElement.offsetTop - (this.element.offsetHeight - tileElement.offsetHeight) / 2;
                 this.element.scrollTo(scrollX, scrollY);
-            }
+            });
+        }
+        this._tasks.schedule((controller) => {
+            this.update({_activeCell: activeCell});
         });
+    }
+
+    // Returns (column, row) of a tile located at grid's pixel coordinates (x, y)
+    _tileAtPoint(x, y) {
+        if (this._tilesOffset !== null) {
+            let column = Math.floor((x - this._tilesOffset.x) / this._tilesStride.x);
+            let row = Math.floor((y - this._tilesOffset.y) / this._tilesStride.y);
+            return new Coordinate(column, row);
+        } else {
+            return null;
+        }
+    }
+
+    _loadCellsTaskFunc(coordinates, controller) {
+        const fragment = document.createDocumentFragment();
+        for (const [column, row] of coordinates) {
+            if (controller.cancelRequested) {
+                break;
+            }
+            const child = this._children.get(column, row);
+            if (!child.element) {
+                fragment.appendChild(child.build());
+            }
+        }
+        this._gridElement.appendChild(fragment);
+    }
+
+    // Loads tiles located at coordinates from coordIterator
+    _loadCells(coordIterator) {
+        if (this._loadCellsTask !== null) {
+            this._tasks.cancel(this._loadCellsTask);
+        }
+        this._loadCellsTask = this._tasks.schedule(this._loadCellsTaskFunc.bind(this), [coordIterator])
+    }
+
+    _viewportGeometryChanged() {
+        if (!this.element) {
+            return;
+        }
+        const x = this.element.scrollLeft;
+        const y = this.element.scrollTop;
+        const w = this.element.clientWidth;
+        const h = this.element.clientHeight;
+
+        const EXTRA_TILES_MARGIN = 8;
+
+        let tl = this._tileAtPoint(x, y);
+        let br = this._tileAtPoint(x+w, y+h);
+        if (tl && br) {
+            tl.x = Math.max(tl.x - EXTRA_TILES_MARGIN, 0) + 1;
+            tl.y = Math.max(tl.y - EXTRA_TILES_MARGIN, 0) + 1;
+            br.x = Math.min(br.x + EXTRA_TILES_MARGIN, this._children.width-2) + 1;
+            br.y = Math.min(br.y + EXTRA_TILES_MARGIN, this._children.height-2) + 1;
+        } else {
+            tl = new Coordinate(1, 1);
+            br = new Coordinate(this._children.width-1, this._children.height-1);
+        }
+
+        if (!isEqual(tl, this._viewportTlTile) || !isEqual(br, this._viewportBrTile)) {
+            this._loadCells(rectGen(tl, br));
+
+            const oldTl = this._viewportTlTile;
+            const oldBr = this._viewportBrTile;
+
+            // Remove invisible elements
+            if (oldTl && oldBr) {
+                this._tasks.schedule(() => {
+                    // Above new
+                    for (let y = oldTl.y; y <= Math.min(tl.y-1, oldBr.y); y++) {
+                        for (let x = oldTl.x; x <= oldBr.x; x++) {
+                            this._children.get(x, y).disposeElement();
+                        }
+                    }
+                    // Below new
+                    for (let y = Math.max(br.y+1, oldTl.y); y <= oldBr.y; y++) {
+                        for (let x = oldTl.x; x <= oldBr.x; x++) {
+                            this._children.get(x, y).disposeElement();
+                        }
+                    }
+                    for (let y = Math.max(tl.y, oldTl.y); y <= Math.min(oldBr.y, br.y); y++) {
+                        // Left of new
+                        for (let x = oldTl.x; x <= Math.min(tl.x-1, oldBr.x); x++) {
+                            this._children.get(x, y).disposeElement();
+                        }
+                        // Right of new
+                        for (let x = Math.max(br.x+1, oldTl.x); x <= oldBr.x; x++) {
+                            this._children.get(x, y).disposeElement();
+                        }
+                    }
+                });
+            }
+
+            this._viewportTlTile = tl;
+            this._viewportBrTile = br;
+        }
+    }
+
+    _onWindowResized(event) {
+        if (this._viewportChangedTimeout !== null) {
+            clearTimeout(this._viewportChangedTimeout);
+        }
+        this._viewportChangedTimeout = setTimeout(()=>this._viewportGeometryChanged(), 0);
+    }
+
+    _onScroll(event) {
+        if (this._viewportChangedTimeout !== null) {
+            clearTimeout(this._viewportChangedTimeout);
+        }
+        this._viewportChangedTimeout = setTimeout(()=>this._viewportGeometryChanged(), 0);
     }
 
     _buildElement() {
         const element = document.createElement("div");
         element.classList.add("grid-view");
+
+        window.addEventListener("resize", (event) => this._onWindowResized(event));
+        element.addEventListener("scroll", (event) => this._onScroll(event));
 
         const gridElement = document.createElement("div");
         gridElement.classList.add("grid-view__grid");
@@ -217,58 +388,43 @@ export class GridView extends Component {
             this._gridElement.style.display = previousDisplay;
             this._gridElement.style.visibility = previousVisibility;
 
-            // Schedule cells generation
+            // Show Headers
 
-            function* rectGen(a, b) {
-                let tl = [Math.min(a[0], b[0]), Math.min(a[1], b[1])];
-                let br = [Math.max(a[0], b[0]), Math.max(a[1], b[1])];
-                for (let x = tl[0]; x <= br[0]; x++) {
-                    for (let y = tl[1]; y <= br[1]; y++) {
-                        yield [x, y];
-                    }
-                }
-            }
-
-            function* multiGen(...generators) {
-                for (const generator of generators) {
-                    yield* generator;
-                }
-            }
-
-            const showChunk = (coordinates, runner) => {
-                const fragment = document.createDocumentFragment();
-                for (const [column, row] of coordinates) {
-                    if (runner.cancelRequested) {
-                        break;
-                    }
-                    const child = this._children.get(column, row);
-                    if (!child.element) {
-                        fragment.appendChild(child.build());
-                    }
-                }
-                this._gridElement.appendChild(fragment);
-            }
-
-            // Headers
-
-            this._tasks.scheduleTasks(showChunk, [multiGen(
+            this._tasks.schedule(this._loadCellsTaskFunc.bind(this), [multiGen(
                 rectGen([0, 0], [this._children.width-1, 0]),
                 rectGen([0, 1], [0, this._children.height-1]),
             )]);
 
-            // Tiles
+            // Calculate cell offset and stride
 
-            function *gridChunkGenerator(columnCount, rowCount) {
-                const CHUNK_SIZE = 16;
-                for (let row = 1; row < rowCount; row+=CHUNK_SIZE) {
-                    for (let column = 1; column < columnCount; column+=CHUNK_SIZE) {
-                        const lastColumn = Math.min(column+CHUNK_SIZE-1, columnCount-1);
-                        const lastRow = Math.min(row+CHUNK_SIZE-1, rowCount-1);
-                        yield rectGen([column, row], [lastColumn, lastRow]);
-                    }
+            const calculateGridGeometry = () => {
+                if ((this._children.width >= 3) && (this._children.height >= 3)) {
+                    const columnHeader0 = this._children.get(1, 0).element;
+                    const rowHeader0 = this._children.get(0, 1).element;
+                    const offset = {
+                        x: columnHeader0.offsetLeft,
+                        y: rowHeader0.offsetTop,
+                    };
+
+                    const columnHeader1 = this._children.get(2, 0).element;
+                    const rowHeader1 = this._children.get(0, 2).element;
+                    const stride = {
+                        x: columnHeader1.offsetLeft - offset.x,
+                        y: rowHeader1.offsetTop - offset.y,
+                    };
+
+                    this._tilesOffset = offset;
+                    this._tilesStride = stride;
+                } else {
+                    this._tilesOffset = null;
+                    this._tilesStride = null;
                 }
-            }
-            this._tasks.scheduleTasks(showChunk, gridChunkGenerator(this._children.width, this._children.height));
+            };
+            this._tasks.schedule(calculateGridGeometry);
+
+            // Force view refresh
+
+            this._tasks.schedule(()=>{this._viewportGeometryChanged()});
         }
         if ("_activeCell" in properties) {
             const activeCell = properties._activeCell;
@@ -277,9 +433,9 @@ export class GridView extends Component {
                 if (coord === null) {
                     return;
                 }
-                const tile = this._children.get(coord.column + 1, coord.row + 1);
-                const columnHeader = this._children.get(coord.column + 1, 0);
-                const rowHeader = this._children.get(0, coord.row + 1);
+                const tile = this._children.get(coord.x, coord.y);
+                const columnHeader = this._children.get(coord.x, 0);
+                const rowHeader = this._children.get(0, coord.y);
                 if (tile) {
                     tile.update({active: active});
                 }
@@ -292,8 +448,8 @@ export class GridView extends Component {
             const onActiveCellChanged = ("onActiveCellChanged" in properties) ? properties.onActiveCellChanged : oldProperties.onActiveCellChanged;
             if (onActiveCellChanged !== null) {
                 if (activeCell !== null) {
-                    const dataId = this._data.get(activeCell.column, activeCell.row);
-                    onActiveCellChanged(dataId, activeCell.column, activeCell.row);
+                    const dataId = this._data.get(activeCell.x-1, activeCell.y-1);
+                    onActiveCellChanged(dataId, activeCell.x-1, activeCell.y-1);
                 } else {
                     onActiveCellChanged(null, null, null);
                 }
