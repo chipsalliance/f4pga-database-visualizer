@@ -52,7 +52,6 @@ export class Minimap extends Component {
             }
         };
         viewAreaIndicator.addEventListener("mousedown", (event)=>{
-            console.log(event.button);
             if (event.button === 0) {
                 const indicatorRect = viewAreaIndicator.getBoundingClientRect();
                 this._startX = event.clientX - indicatorRect.x;
