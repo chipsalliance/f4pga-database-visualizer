@@ -1,0 +1,56 @@
+@use "@material/elevation";
+@use "@material/animation";
+
+.minimap {
+    background-color: var(--minimap--bg-color, #fff);
+    border-radius: 4px;
+    padding: 4px;
+    @include elevation.elevation(8);
+    overflow: hidden;
+
+    &.zero-size {
+        display: none;
+    }
+
+    > canvas {
+        display: block;
+    }
+
+    .minimap__view-area-indicator {
+        position: absolute;
+        left: calc(2px + var(--x0) * (100% - 8px));
+        top: calc(2px + var(--y0) * (100% - 8px));
+        right: max(calc(2px + (1 - var(--x1)) * (100% - 8px)), 2px);
+        bottom: max(calc(2px + (1 - var(--y1)) * (100% - 8px)), 2px);
+        border-radius: 2px;
+        border: 2px solid var(--minimap--overlay-border-color);
+        box-shadow: 0 0 0 100vh var(--minimap--overlay-color),
+                    0 1px 4px 0 #0008;
+
+
+        cursor: grab;
+        &.dragging {
+            cursor: grabbing;
+        }
+
+        transition-property: opacity border-color;
+        transition-duration: 175ms;
+        transition-timing-function: animation.$standard-curve-timing-function;
+
+        &.zero-size {
+            display: none;
+        }
+    }
+
+    &:hover {
+        > .minimap__view-area-indicator {
+            box-shadow: 0 0 0 100vh var(--minimap--overlay-hover-color),
+                        0 1px 4px 0 #0008;
+            &:hover {
+                border-color: var(--minimap--overlay-hover-border-color);
+                box-shadow: 0 0 0 100vh var(--minimap--overlay-hover-color),
+                            0 2px 8px 0 #0008;
+            }
+        }
+    }
+}

@@ -110,6 +110,12 @@ body {
     --grid-view__header--active-fg-color:  #{$cl-gray};
     --grid-view__tile--default-bg-color:   #{$cl-gray-light};
     --grid-view__tile--default-fg-color:   #{$cl-gray};
+
+    --minimap--bg-color:                   #{rgba(#fff, 1)};
+    --minimap--overlay-color:              #{rgba($cl-gray-light, 0.0)};
+    --minimap--overlay-hover-color:        #{rgba($cl-gray-light, 0.5)};
+    --minimap--overlay-border-color:       #{rgba(#000, 0.5)};
+    --minimap--overlay-hover-border-color: #{rgba(#000, 0.7)};
 }
 
 #grid-view-app {

@@ -1,4 +1,5 @@
 @use "@material/elevation";
+@use "@material/animation";
 
 // HEADER
 
@@ -129,12 +130,19 @@
     user-select: none;
     background-color: var(--grid-view--bg-color);
     color: var(--grid-view--fg-color);
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    grid-template-rows: minmax(1fr, min-content);
+    gap: 8px;
 
     > .grid-view__grid {
         font-size: 0.8em;
 
         width: min-content;
         height: min-content;
+        margin: 0 8px 8px 0;
 
         position: relative;
         z-index: 0;
@@ -143,5 +151,14 @@
         display: grid;
         grid-template-columns: 32px repeat(var(--columns), var(--column-width));
         grid-template-rows: 24px repeat(var(--rows), var(--row-height));
+    }
+
+    > .minimap {
+        align-self: end;
+        justify-self: end;
+        right: 4px;
+        bottom: 4px;
+        margin: 4px;
+        position: sticky;
     }
 }

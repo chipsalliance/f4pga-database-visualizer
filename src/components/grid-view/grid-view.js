@@ -2,7 +2,9 @@ import "./grid-view.scss";
 import {Component} from "../component";
 import {GridColumnHeader, GridCornerHeader, GridRowHeader} from "./grid-header";
 import {GridTile} from "./grid-tile";
-import {EqualSymbol, isEqual} from "../../utils/operators";
+import {isEqual} from "../../utils/operators";
+import {Coordinate, Size, Rect} from "../../utils/coordinate";
+import {Minimap} from "../minimap";
 
 class TasksSequenceRunner {
     constructor() {
@@ -84,25 +86,6 @@ class TasksSequenceRunner {
     }
 };
 
-class Coordinate extends Array {
-    constructor(x, y) {
-        super(2);
-        this.x = x;
-        this.y = y;
-    }
-
-    get x() { return this[0]; };
-    get y() { return this[1]; };
-    set x(v) { this[0] = v; };
-    set y(v) { this[1] = v; };
-
-    [EqualSymbol](other) {
-        return ((other instanceof Coordinate)
-                && (other.x === this.x)
-                && (other.y == this.y));
-    };
-}
-
 // Generates all integer coordinates located inside a rectangle described by topLeft corner and bottomRight corner
 function* rectGen(topLeft, bottomRight) {
     let tl = [Math.min(topLeft[0], bottomRight[0]), Math.min(topLeft[1], bottomRight[1])];
@@ -163,6 +146,16 @@ export class GridView extends Component {
         this._viewportChangedTimeout = null;
         this._viewportTlTile = null;
         this._viewportBLTile = null;
+
+        this._tilesToRemove = []
+
+        this._minimap = new Minimap({onIndicatorMoved: this._minimapIndicatorMoved.bind(this)});
+    }
+
+    _minimapIndicatorMoved(column, row) {
+        const x = column * this._tilesStride.x - this._tilesOffset.x;
+        const y = row * this._tilesStride.y - this._tilesOffset.y;
+        this.element.scrollTo(x, y);
     }
 
     setActiveCell(column, row, show=false) {
@@ -199,7 +192,7 @@ export class GridView extends Component {
                 break;
             }
             const child = this._children.get(column, row);
-            if (!child.element) {
+            if (child && !child.element) {
                 fragment.appendChild(child.build());
             }
         }
@@ -227,14 +220,25 @@ export class GridView extends Component {
 
         let tl = this._tileAtPoint(x, y);
         let br = this._tileAtPoint(x+w, y+h);
+
+        let viewRect = new Rect();
+        const gridBr = new Coordinate((this._children.width-2), (this._children.height-2));
+
+        viewRect.x = x / ((gridBr.x + 1) * this._tilesStride.x);
+        viewRect.width = w / ((gridBr.x + 1) * this._tilesStride.x);
+        viewRect.y = y / ((gridBr.y + 1) * this._tilesStride.y);
+        viewRect.height = h / ((gridBr.y + 1) * this._tilesStride.y);
+
+        this._minimap.update({viewRect: viewRect});
+
         if (tl && br) {
             tl.x = Math.max(tl.x - EXTRA_TILES_MARGIN, 0) + 1;
             tl.y = Math.max(tl.y - EXTRA_TILES_MARGIN, 0) + 1;
-            br.x = Math.min(br.x + EXTRA_TILES_MARGIN, this._children.width-2) + 1;
-            br.y = Math.min(br.y + EXTRA_TILES_MARGIN, this._children.height-2) + 1;
+            br.x = Math.min(br.x + EXTRA_TILES_MARGIN, gridBr.x) + 1;
+            br.y = Math.min(br.y + EXTRA_TILES_MARGIN, gridBr.y) + 1;
         } else {
             tl = new Coordinate(1, 1);
-            br = new Coordinate(this._children.width-1, this._children.height-1);
+            br = new Coordinate(gridBr.x + 1, gridBr.y + 1);
         }
 
         if (!isEqual(tl, this._viewportTlTile) || !isEqual(br, this._viewportBrTile)) {
@@ -246,26 +250,32 @@ export class GridView extends Component {
             // Remove invisible elements
             if (oldTl && oldBr) {
                 this._tasks.schedule(() => {
+                    const disposeElement = (x, y) => {
+                        const child = this._children.get(x, y);
+                        if (child) {
+                            child.disposeElement();
+                        }
+                    }
                     // Above new
                     for (let y = oldTl.y; y <= Math.min(tl.y-1, oldBr.y); y++) {
                         for (let x = oldTl.x; x <= oldBr.x; x++) {
-                            this._children.get(x, y).disposeElement();
+                            disposeElement(x, y);
                         }
                     }
                     // Below new
                     for (let y = Math.max(br.y+1, oldTl.y); y <= oldBr.y; y++) {
                         for (let x = oldTl.x; x <= oldBr.x; x++) {
-                            this._children.get(x, y).disposeElement();
+                            disposeElement(x, y);
                         }
                     }
                     for (let y = Math.max(tl.y, oldTl.y); y <= Math.min(oldBr.y, br.y); y++) {
                         // Left of new
                         for (let x = oldTl.x; x <= Math.min(tl.x-1, oldBr.x); x++) {
-                            this._children.get(x, y).disposeElement();
+                            disposeElement(x, y);
                         }
                         // Right of new
                         for (let x = Math.max(br.x+1, oldTl.x); x <= oldBr.x; x++) {
-                            this._children.get(x, y).disposeElement();
+                            disposeElement(x, y);
                         }
                     }
                 });
@@ -294,13 +304,14 @@ export class GridView extends Component {
         const element = document.createElement("div");
         element.classList.add("grid-view");
 
-        window.addEventListener("resize", (event) => this._onWindowResized(event));
-        element.addEventListener("scroll", (event) => this._onScroll(event));
+        window.addEventListener("resize", (event) => this._onWindowResized(event), {passive: true});
+        element.addEventListener("scroll", (event) => this._onScroll(event), {passive: true});
 
         const gridElement = document.createElement("div");
         gridElement.classList.add("grid-view__grid");
 
         element.appendChild(gridElement);
+        element.appendChild(this._minimap.build());
         this._gridElement = gridElement;
 
         return element;
@@ -313,6 +324,8 @@ export class GridView extends Component {
             this._children = new Array2D(model.columnCount + 1, model.rowCount + 1);
             this._data = new Array2D(model.columnCount, model.rowCount);
 
+            this._minimap.update({size: new Size(model.columnCount, model.rowCount)});
+
             this._children.set(0, 0, new GridCornerHeader());
 
             const columnHeaders = model.columnHeaders;
@@ -323,6 +336,8 @@ export class GridView extends Component {
             for (let i = 0; i < model.rowCount; i++) {
                 this._children.set(0, i+1, new GridRowHeader({index: i, text: rowHeaders[i]}));
             }
+
+            const minimapCells = [];
 
             const words = new Set();
             const texts = new Set();
@@ -342,6 +357,14 @@ export class GridView extends Component {
                     onClick: (tile, event) => { this.setActiveCell(tile.column, tile.row); },
                 }));
 
+                minimapCells.push({
+                    x: cell.column,
+                    y: cell.row,
+                    width: cell.width || 1,
+                    height: cell.height || 1,
+                    color: cell.color
+                });
+
                 // Assume all digits have equal width
                 const sizeMeasurementText = cell.text.replaceAll(/[1-9]/g, '0');
                 sizeMeasurementText.split(" ").forEach((v) => words.add(v));
@@ -349,6 +372,8 @@ export class GridView extends Component {
 
                 this._data.set(cell.column, cell.row, cell.dataId);
             }
+
+            this._minimap.drawCells(minimapCells);
 
             // Calculate tile size
 
