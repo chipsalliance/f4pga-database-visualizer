@@ -54,16 +54,14 @@
     grid-row: calc(var(--row) + 2) / calc(var(--row) + 2 + var(--height, 1)) ;
     grid-column: calc(var(--column) + 2) / calc(var(--column) + 2 + var(--width, 1));
     z-index: 0;
+    position: relative;
 
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     text-overflow: ellipsis;
-    padding: 2px 6px;
-    // height lower than 24px causes huge performance drop, at least in Firefox
-    min-height: max(24px, 1.5em);
-    position: relative;
+    padding: 4px 6px;
 
     cursor: pointer;
     border: 1px solid var(--grid-view--bg-color);
@@ -150,7 +148,7 @@
 
         display: grid;
         grid-template-columns: 32px repeat(var(--columns), var(--column-width));
-        grid-template-rows: 24px repeat(var(--rows), var(--row-height));
+        grid-template-rows: max(16px, 1em) repeat(var(--rows), var(--row-height));
     }
 
     > .minimap {
