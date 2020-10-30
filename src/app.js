@@ -144,7 +144,7 @@ function updateDatabaseInfoView(name, description, version, buildDate, buildSour
         const url = new URL(window.location);
         url.hash = "";
         for(const gridId of gridsList) {
-            const isCurrentGrid = (AppParams.gridId === gridId) || (!gridsList.includes(Database.DEFAULT_GRID_ID) && (gridsList[0] === gridId));
+            const isCurrentGrid = (AppParams.gridId === gridId) || (!gridsList.includes(Database.DEFAULT_GRID_ID) && (AppParams.gridId === Database.DEFAULT_GRID_ID) && (gridsList[0] === gridId));
             const el = document.createElement(isCurrentGrid ? "strong" : "a");
             if (!isCurrentGrid) {
                 url.searchParams.set("grid", encodeURIComponent(gridId));
