@@ -154,7 +154,7 @@ class TemplateParser {
             for (let i = 0; i < searchReplacementPairs.length-1; i+=2) {
                 const search = RegExp(searchReplacementPairs[i].toString(), "g");
                 const replacement = searchReplacementPairs[i+1].toString();
-                result = result.replaceAll(search, replacement);
+                result = result.replace(search, replacement);
             }
             return result;
         }

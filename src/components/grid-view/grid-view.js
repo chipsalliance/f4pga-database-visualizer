@@ -363,7 +363,7 @@ export class GridView extends Component {
                 }]);
 
                 // Assume all digits have equal width
-                const sizeMeasurementText = cell.text.replaceAll(/[1-9]/g, '0');
+                const sizeMeasurementText = cell.text.replace(/[1-9]/g, '0');
                 sizeMeasurementText.split(" ").forEach((v) => words.add(v));
                 texts.add(sizeMeasurementText);
             }
