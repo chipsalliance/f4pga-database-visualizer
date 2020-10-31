@@ -65,11 +65,30 @@ Following line will generate `artix7.json` data file from files in `$PRJXRAYDB_D
 
 ## Using data files with the app
 
+### Remote data files
+
+Data file can be loaded from any HTTP server as long as the server's [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers allow it. To do that just type a JSON file URL in the app.
+
+### Local data files with the app started from a local server
+
 * Copy the directory with generated files to app bundle top directory. If you want to use the data with app started from sources (i.e. with `npm start`) copy it to repository's top directory.
 * Open in a browser:
 
   ```
-  http://localhost:8080/&dbfile=./data/artix7.json
+  http://localhost:8080/?dbfile=./data/artix7.json
   ```
 
   where `./data/artix7.json` is a path to main data file.
+
+### Local data files with the app started from remote server
+
+* Run following command in a shell:
+
+  ```
+  ./utils/httpserver.py ./examples
+  ```
+
+  where `./examples` is a path to directory with .json files. The script will print a list of found data files and their URLs.
+
+* Copy a data file URL and paste it in the app
+
