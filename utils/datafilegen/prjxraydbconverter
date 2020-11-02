@@ -47,7 +47,7 @@ class PrjxrayDbConverter:
                 range[1] = value
 
         grid = SdbvGrid()
-        grid.cells.fieldOrder = ["col", "row", "fullName", "type"]
+        grid.cells.fieldOrder = ["col", "row", "fullName", "type", "description"]
         grid.cells.templateConsts = {
             "COLORS": {}
         }
@@ -84,18 +84,38 @@ class PrjxrayDbConverter:
             col = entries["grid_x"]
             row = entries["grid_y"]
             typ = entries["type"]
+
+            description = [
+                {"Grid position": f"({col}, {row})"},
+            ]
+            clock_region = entries.get("clock_region", None)
+            if clock_region:
+                description.append({"Clock region": clock_region})
+
+            sites = entries.get("sites", {})
+            if len(sites) > 0:
+                description.append("# Sites")
+                for site_name, site_type in sites.items():
+                    description.append({site_name: site_type})
+
+            pin_functions = entries.get("pin_functions", {})
+            if len(pin_functions) > 0:
+                description.append("# Pin functions")
+                for pf_name, pf_type in pin_functions.items():
+                    description.append({pf_name: pf_type})
+
             cell = {
                 "fullName": name,
-                "col":  entries["grid_x"],
-                "row":  entries["grid_y"],
+                "col": entries["grid_x"],
+                "row": entries["grid_y"],
                 "type": entries["type"],
+                "description": description
             }
             update_range(cols_range, col)
             update_range(rows_range, row)
 
             if entries["type"] not in grid.cells.templateConsts["COLORS"]:
                 grid.cells.templateConsts["COLORS"][entries["type"]] = lookup_color(entries["type"])
-
 
             grid.cells.addCell(cell)
 
