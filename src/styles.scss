@@ -304,25 +304,38 @@ body {
                 ul {
                     margin: 0 0 8px 0;
                     padding: 0;
-                    list-style-position: inside;
+                    list-style: none;
                     li {
-                        padding: 0;
+                        &::before {
+                            display: inline-block;
+                            width: 2ex;
+                            text-indent: 0;
+                            content: "\2022";
+                        }
+                        text-indent: -2ex;
+                        padding: 0 0 0 2ex;
+                        margin: 0;
                     }
                 }
 
                 dl {
-                    margin: 0 0 8px 0;
+                    margin: 0 0 8px 2em;
 
                     dt {
-                        display: block;
-                        margin: 0;
+                        display: inline;
+                        margin: 0 0 0 -2em;
                         font-weight: bold;
                         &:after { content: ":"; }
                     }
                     dd {
-                        display: block;
-                        margin: 0 0 8px 1em;
-                        &:last-child { margin-bottom: 0; }
+                        display: inline;
+                        margin: 0 0 0 1ex;
+                        &:after {
+                            content: '\A';
+                            display: block;
+                            margin: 0 0 8px 0;
+                        }
+                        &:last-of-type:after { margin-bottom: 0; }
                     }
                 }
             }

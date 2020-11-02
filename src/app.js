@@ -74,6 +74,10 @@ function renderDescription(containerNode, description) {
                 let listBuilder = new HTMLHelpers.ListBuilder("ul");
                 entry.value.forEach((vv)=>listBuilder.addEntry(vv.toString(10)));
                 value = [listBuilder.build()];
+            } else if (entry.value instanceof Object) {
+                let subDlBuilder = new HTMLHelpers.DefinitionListBuilder();
+                Object.entries(entry.value).forEach(([k, v])=>subDlBuilder.addEntry(k, v.toString()));
+                value = [subDlBuilder.build()];
             } else {
                 value = entry.value;
             }
@@ -84,9 +88,15 @@ function renderDescription(containerNode, description) {
                 dlBuilder = null;
             }
             if (typeof entry == "string") {
-                let p = document.createElement("p");
-                p.innerText = entry;
-                containerNode.appendChild(p);
+                if (entry.startsWith("# ")) {
+                    let h = document.createElement("h4");
+                    h.innerText = entry.substring(2).trim();
+                    containerNode.appendChild(h);
+                } else {
+                    let p = document.createElement("p");
+                    p.innerText = entry.trim();
+                    containerNode.appendChild(p);
+                }
             } else {
                 console.warn("Unknown element in Description:", entry);
             }

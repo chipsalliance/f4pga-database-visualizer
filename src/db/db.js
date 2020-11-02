@@ -228,12 +228,22 @@ function processDescription(value, warningCallback=defaultWarningCallback) {
                         if (matchType(v, {is: [String, Number]})) {
                             list.push(v.toString());
                         } else {
-                            this.warningCallback(v, "Invalid value.");
+                            warningCallback(v, "Invalid value.");
+                        }
+                    });
+                    out.push({key: k, value: list});
+                } else if (matchType(v, {is: Object})) {
+                    let list = {};
+                    Object.entries(v).forEach(([k, v]) => {
+                        if (matchType(v, {is: [String, Number]})) {
+                            list[k] = v.toString();
+                        } else {
+                            warningCallback(v, "Invalid value.");
                         }
                     });
                     out.push({key: k, value: list});
                 } else {
-                    this.warningCallback(v, "Invalid value.");
+                    warningCallback(v, "Invalid value.");
                 }
             });
             return true;
@@ -244,7 +254,7 @@ function processDescription(value, warningCallback=defaultWarningCallback) {
             v.forEach((v) => {
                 processIfString(v, out) ||
                 processIfObject(v, out) ||
-                this.warningCallback(v, "Invalid value.");
+                warningCallback(v, "Invalid value.");
             });
             return true;
         }
@@ -254,7 +264,7 @@ function processDescription(value, warningCallback=defaultWarningCallback) {
     processIfString(value, result) ||
     processIfObject(value, result) ||
     processIfArray(value, result) ||
-    this.warningCallback(value, "Invalid value.");
+    warningCallback(value, "Invalid value.");
 
     return result;
 }
