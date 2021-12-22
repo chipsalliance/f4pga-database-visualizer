@@ -1,5 +1,7 @@
 # SymbiFlow Database Visualizer
 
+Copyright (c) 2020-2021 The SymbiFlow Authors
+
 ## Dependences
 
 * a web browser (Chrome/Chromium is recommended)

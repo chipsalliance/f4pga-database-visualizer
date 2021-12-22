@@ -1,7 +1,7 @@
 {
   "name": "symbiflow-database-visualizer",
   "version": "0.0.0",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --env.NODE_ENV=development -d --progress",
