@@ -57,7 +57,7 @@ class PrjxrayDbConverter:
             "name": r"{replace(fullName, 'INTERFACE_','IFACE_', '_(.)_','\u00a0$1_', '^(.)_','$1\u00a0', '_',' ')}"
         }
 
-        # Coloring rules from https://github.com/SymbiFlow/prjxray/tree/master/htmlgen
+        # Coloring rules from https://github.com/f4pga/prjxray/tree/master/htmlgen
         color_map = [
             (r"NULL|.*BRK.*", None),
             (r".*IO.*", Colors.LIGHT_GRAY),

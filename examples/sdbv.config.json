@@ -49,7 +49,7 @@
    "url": "zynq7/xc7z020clg484-1.json"
   },
   {
-   "name": "symbiflow-arch-defs/ice40 (generated from arch.xml file)",
+   "name": "f4pga-arch-defs/ice40 (generated from arch.xml file)",
    "url": "ice40/ice40.json"
   }
  ]

@@ -12,7 +12,7 @@ loge() { printf '\033[31m[%s]\033[0m \033[91m%s\033[0m\n' "ERR" "$*"; }
 
 if [[ ! -d ${PRJXRAYDB_DIR:-} ]]; then
 	loge "'PRJXRAYDB_DIR' environment variable must contain path to" \
-	     "Project X-Ray database (https://github.com/SymbiFlow/prjxray-db)" \
+	     "Project X-Ray database (https://github.com/f4pga/prjxray-db)" \
 	     "directory."
 	exit 1
 fi
@@ -62,12 +62,12 @@ for chip_dir in $PRJXRAYDB_DIR/*/xc*/; do
 done
 
 #─────────────────────────────────────────────────────────────────────────────
-# Copy example data file generated from SymbiFlow Arch Defs' arch.xml
+# Copy example data file generated from F4PGA Arch Defs' arch.xml
 
-mkdir -p $DATA_OUT_DIR/symbiflow-arch-defs
-cp -r $TOP/examples/ice40 $DATA_OUT_DIR/symbiflow-arch-defs/ice40
-data_files_name_list+=("symbiflow-arch-defs/ice40 (generated from arch.xml file)")
-data_files_path_list+=("$DATA_OUT_DIR/symbiflow-arch-defs/ice40/ice40.json")
+mkdir -p $DATA_OUT_DIR/f4pga-arch-defs
+cp -r $TOP/examples/ice40 $DATA_OUT_DIR/f4pga-arch-defs/ice40
+data_files_name_list+=("f4pga-arch-defs/ice40 (generated from arch.xml file)")
+data_files_path_list+=("$DATA_OUT_DIR/f4pga-arch-defs/ice40/ice40.json")
 
 #─────────────────────────────────────────────────────────────────────────────
 # Generate config

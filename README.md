@@ -1,6 +1,6 @@
-# SymbiFlow Database Visualizer
+# F4PGA Database Visualizer
 
-Copyright (c) 2020-2021 The SymbiFlow Authors
+Copyright (c) 2020-2022 F4PGA Authors
 
 ## Dependences
 

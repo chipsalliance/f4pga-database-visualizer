@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout symbiflow-database-visualizer
+      - name: Checkout f4pga-database-visualizer
         uses: actions/checkout@v2
         with:
           persist-credentials: false
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout prjxray-db
         uses: actions/checkout@v2
         with:
-          repository: SymbiFlow/prjxray-db
+          repository: f4pga/prjxray-db
           path: external_repos/prjxray-db
 
       - uses: actions/setup-node@v1
