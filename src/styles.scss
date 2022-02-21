@@ -1,8 +1,8 @@
 @use "@material/theme" with (
     $on-surface: #000,
-    $primary: #5E35B1, // deep purple 600
+    $primary: #3F51B5, // indigo 500
     $on-primary: #fff,
-    $secondary: #8E24AA, // purple 600
+    $secondary: #2196F3, // blue 500
     $on-secondary: #fff,
     $background: #fff,
 );
@@ -30,9 +30,7 @@ $divider-color: rgba(theme.prop-value(on-surface), 0.12);
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,700,900");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
-$cl-purple: #5E35B1;
-$cl-purple-mid: #742bff;
-$cl-purple-light: #9258FF;
+$cl-primary: #3F51B5; // indigo 500
 $cl-gray: #6d6d6d;
 $cl-gray-mid: #e6e6e6;
 $cl-gray-light: #f6f5f4;
@@ -101,6 +99,8 @@ body {
     font-size: 14px;
     overflow: hidden;
 
+    --overlay--bg-color:                   #{$cl-primary};
+
     --grid-view--bg-color:                 #{$cl-gray-light};
     --grid-view--fg-color:                 #{$cl-gray};
     --grid-view__header--divider-color:    #{$divider-color};
@@ -133,7 +133,7 @@ body {
 
     %app-header {
         background-color: white;
-        color: $cl-purple;
+        color: $cl-primary;
         border-bottom: 1px solid $divider-color;
 
         display: flex;
@@ -148,7 +148,7 @@ body {
         @extend %app-header;
         grid-area: header;
         background-color: white;
-        color: $cl-purple;
+        color: $cl-primary;
         border-bottom: 1px solid $divider-color;
 
         display: flex;
@@ -186,7 +186,7 @@ body {
             a {
                 &[href] {
                     color: unset;
-                    text-decoration-color: rgba($cl-purple, 0.25);
+                    text-decoration-color: rgba($cl-primary, 0.25);
 
                     &:hover {
                         opacity: 0.5;
@@ -277,7 +277,7 @@ body {
                 }
 
                 h3 {
-                    color: $cl-purple;
+                    color: $cl-primary;
                     margin: 16px 0;
                     font-size: 16px;
                     font-weight: 700;
@@ -289,7 +289,7 @@ body {
                 }
 
                 h4 {
-                    color: $cl-purple;
+                    color: $cl-primary;
                     margin: 16px 0;
                     font-size: 14px;
                     font-weight: 700;
