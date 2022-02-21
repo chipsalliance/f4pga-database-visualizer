@@ -29,8 +29,8 @@
    "url": "data/prjxraydb/zynq7/xc7z020.json"
   },
   {
-   "name": "symbiflow-arch-defs/ice40 (generated from arch.xml file)",
-   "url": "data/symbiflow-arch-defs/ice40/ice40.json"
+   "name": "f4pga-arch-defs/ice40 (generated from arch.xml file)",
+   "url": "data/f4pga-arch-defs/ice40/ice40.json"
   }
  ]
 }
