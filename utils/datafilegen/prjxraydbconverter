@@ -29,7 +29,7 @@ class PrjxrayDbConverter:
 
     def _process_tilegrid(self):
         obj = None
-        with open(self.src/"tilegrid.json", "r") as file:
+        with open(self.src/"part.json", "r") as file:
             obj = json.load(file)
 
         self.data_file.setBuildDate(datetime.now())
