@@ -18,7 +18,7 @@ class PrjxrayDbConverter:
         #Read parts.yaml file and get path
         with open(self.src.parent/"mapping/parts.yaml", 'r') as f:  
             data = yaml.safe_load(f)
-            if data.get(self.src.name):
+            if self.src.name in data:
                 device = data.get(self.src.name).get("device")
             else:
                 device = self.src.name
