@@ -5,28 +5,528 @@
    "url": "data/prjxraydb/artix7/xc7a100t.json"
   },
   {
+   "name": "artix7 (xc7a100tcsg324-1)",
+   "url": "data/prjxraydb/artix7/xc7a100tcsg324-1.json"
+  },
+  {
+   "name": "artix7 (xc7a100tcsg324-2)",
+   "url": "data/prjxraydb/artix7/xc7a100tcsg324-2.json"
+  },
+  {
+   "name": "artix7 (xc7a100tcsg324-2L)",
+   "url": "data/prjxraydb/artix7/xc7a100tcsg324-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a100tcsg324-3)",
+   "url": "data/prjxraydb/artix7/xc7a100tcsg324-3.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg484-1)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg484-1.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg484-2)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg484-2.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg484-2L)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg484-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg484-3)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg484-3.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg676-1)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg676-1.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg676-2)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg676-2.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg676-2L)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg676-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a100tfgg676-3)",
+   "url": "data/prjxraydb/artix7/xc7a100tfgg676-3.json"
+  },
+  {
+   "name": "artix7 (xc7a100tftg256-1)",
+   "url": "data/prjxraydb/artix7/xc7a100tftg256-1.json"
+  },
+  {
+   "name": "artix7 (xc7a100tftg256-2)",
+   "url": "data/prjxraydb/artix7/xc7a100tftg256-2.json"
+  },
+  {
+   "name": "artix7 (xc7a100tftg256-2L)",
+   "url": "data/prjxraydb/artix7/xc7a100tftg256-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a100tftg256-3)",
+   "url": "data/prjxraydb/artix7/xc7a100tftg256-3.json"
+  },
+  {
    "name": "artix7 (xc7a200t)",
    "url": "data/prjxraydb/artix7/xc7a200t.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg484-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg484-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg484-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg484-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg484-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg484-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg484-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg484-3.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg676-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg676-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg676-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg676-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg676-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg676-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbg676-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbg676-3.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv484-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv484-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv484-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv484-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv484-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv484-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv484-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv484-3.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv676-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv676-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv676-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv676-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv676-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv676-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tfbv676-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tfbv676-3.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffg1156-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tffg1156-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffg1156-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tffg1156-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffg1156-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tffg1156-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffg1156-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tffg1156-3.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffv1156-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tffv1156-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffv1156-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tffv1156-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffv1156-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tffv1156-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tffv1156-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tffv1156-3.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbg484-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbg484-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbg484-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbg484-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbg484-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbg484-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbg484-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbg484-3.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbv484-1)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbv484-1.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbv484-2)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbv484-2.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbv484-2L)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbv484-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a200tsbv484-3)",
+   "url": "data/prjxraydb/artix7/xc7a200tsbv484-3.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcpg236-1)",
+   "url": "data/prjxraydb/artix7/xc7a35tcpg236-1.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcpg236-2)",
+   "url": "data/prjxraydb/artix7/xc7a35tcpg236-2.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcpg236-2L)",
+   "url": "data/prjxraydb/artix7/xc7a35tcpg236-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcpg236-3)",
+   "url": "data/prjxraydb/artix7/xc7a35tcpg236-3.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg324-1)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg324-1.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg324-2)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg324-2.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg324-2L)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg324-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg324-3)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg324-3.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg325-1)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg325-1.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg325-2)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg325-2.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg325-2L)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg325-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a35tcsg325-3)",
+   "url": "data/prjxraydb/artix7/xc7a35tcsg325-3.json"
+  },
+  {
+   "name": "artix7 (xc7a35tfgg484-1)",
+   "url": "data/prjxraydb/artix7/xc7a35tfgg484-1.json"
+  },
+  {
+   "name": "artix7 (xc7a35tfgg484-2)",
+   "url": "data/prjxraydb/artix7/xc7a35tfgg484-2.json"
+  },
+  {
+   "name": "artix7 (xc7a35tfgg484-2L)",
+   "url": "data/prjxraydb/artix7/xc7a35tfgg484-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a35tfgg484-3)",
+   "url": "data/prjxraydb/artix7/xc7a35tfgg484-3.json"
+  },
+  {
+   "name": "artix7 (xc7a35tftg256-1)",
+   "url": "data/prjxraydb/artix7/xc7a35tftg256-1.json"
+  },
+  {
+   "name": "artix7 (xc7a35tftg256-2)",
+   "url": "data/prjxraydb/artix7/xc7a35tftg256-2.json"
+  },
+  {
+   "name": "artix7 (xc7a35tftg256-2L)",
+   "url": "data/prjxraydb/artix7/xc7a35tftg256-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a35tftg256-3)",
+   "url": "data/prjxraydb/artix7/xc7a35tftg256-3.json"
   },
   {
    "name": "artix7 (xc7a50t)",
    "url": "data/prjxraydb/artix7/xc7a50t.json"
   },
   {
+   "name": "artix7 (xc7a50tcpg236-1)",
+   "url": "data/prjxraydb/artix7/xc7a50tcpg236-1.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcpg236-2)",
+   "url": "data/prjxraydb/artix7/xc7a50tcpg236-2.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcpg236-2L)",
+   "url": "data/prjxraydb/artix7/xc7a50tcpg236-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcpg236-3)",
+   "url": "data/prjxraydb/artix7/xc7a50tcpg236-3.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg324-1)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg324-1.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg324-2)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg324-2.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg324-2L)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg324-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg324-3)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg324-3.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg325-1)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg325-1.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg325-2)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg325-2.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg325-2L)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg325-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a50tcsg325-3)",
+   "url": "data/prjxraydb/artix7/xc7a50tcsg325-3.json"
+  },
+  {
+   "name": "artix7 (xc7a50tfgg484-1)",
+   "url": "data/prjxraydb/artix7/xc7a50tfgg484-1.json"
+  },
+  {
+   "name": "artix7 (xc7a50tfgg484-2)",
+   "url": "data/prjxraydb/artix7/xc7a50tfgg484-2.json"
+  },
+  {
+   "name": "artix7 (xc7a50tfgg484-2L)",
+   "url": "data/prjxraydb/artix7/xc7a50tfgg484-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a50tfgg484-3)",
+   "url": "data/prjxraydb/artix7/xc7a50tfgg484-3.json"
+  },
+  {
+   "name": "artix7 (xc7a50tftg256-1)",
+   "url": "data/prjxraydb/artix7/xc7a50tftg256-1.json"
+  },
+  {
+   "name": "artix7 (xc7a50tftg256-2)",
+   "url": "data/prjxraydb/artix7/xc7a50tftg256-2.json"
+  },
+  {
+   "name": "artix7 (xc7a50tftg256-2L)",
+   "url": "data/prjxraydb/artix7/xc7a50tftg256-2L.json"
+  },
+  {
+   "name": "artix7 (xc7a50tftg256-3)",
+   "url": "data/prjxraydb/artix7/xc7a50tftg256-3.json"
+  },
+  {
    "name": "kintex7 (xc7k70t)",
    "url": "data/prjxraydb/kintex7/xc7k70t.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg484-1)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg484-1.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg484-2)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg484-2.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg484-2L)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg484-2L.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg484-3)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg484-3.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg676-1)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg676-1.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg676-2)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg676-2.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg676-2L)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg676-2L.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbg676-3)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbg676-3.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv484-1)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv484-1.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv484-2)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv484-2.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv484-2L)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv484-2L.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv484-3)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv484-3.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv676-1)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv676-1.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv676-2)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv676-2.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv676-2L)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv676-2L.json"
+  },
+  {
+   "name": "kintex7 (xc7k70tfbv676-3)",
+   "url": "data/prjxraydb/kintex7/xc7k70tfbv676-3.json"
   },
   {
    "name": "spartan7 (xc7s50)",
    "url": "data/prjxraydb/spartan7/xc7s50.json"
   },
   {
+   "name": "spartan7 (xc7s50csga324-1)",
+   "url": "data/prjxraydb/spartan7/xc7s50csga324-1.json"
+  },
+  {
+   "name": "spartan7 (xc7s50csga324-1IL)",
+   "url": "data/prjxraydb/spartan7/xc7s50csga324-1IL.json"
+  },
+  {
+   "name": "spartan7 (xc7s50csga324-2)",
+   "url": "data/prjxraydb/spartan7/xc7s50csga324-2.json"
+  },
+  {
+   "name": "spartan7 (xc7s50fgga484-1)",
+   "url": "data/prjxraydb/spartan7/xc7s50fgga484-1.json"
+  },
+  {
+   "name": "spartan7 (xc7s50fgga484-1IL)",
+   "url": "data/prjxraydb/spartan7/xc7s50fgga484-1IL.json"
+  },
+  {
+   "name": "spartan7 (xc7s50fgga484-2)",
+   "url": "data/prjxraydb/spartan7/xc7s50fgga484-2.json"
+  },
+  {
+   "name": "spartan7 (xc7s50ftgb196-1)",
+   "url": "data/prjxraydb/spartan7/xc7s50ftgb196-1.json"
+  },
+  {
+   "name": "spartan7 (xc7s50ftgb196-1IL)",
+   "url": "data/prjxraydb/spartan7/xc7s50ftgb196-1IL.json"
+  },
+  {
+   "name": "spartan7 (xc7s50ftgb196-2)",
+   "url": "data/prjxraydb/spartan7/xc7s50ftgb196-2.json"
+  },
+  {
    "name": "zynq7 (xc7z010)",
    "url": "data/prjxraydb/zynq7/xc7z010.json"
   },
   {
+   "name": "zynq7 (xc7z010clg225-1)",
+   "url": "data/prjxraydb/zynq7/xc7z010clg225-1.json"
+  },
+  {
+   "name": "zynq7 (xc7z010clg225-2)",
+   "url": "data/prjxraydb/zynq7/xc7z010clg225-2.json"
+  },
+  {
+   "name": "zynq7 (xc7z010clg225-3)",
+   "url": "data/prjxraydb/zynq7/xc7z010clg225-3.json"
+  },
+  {
+   "name": "zynq7 (xc7z010clg400-1)",
+   "url": "data/prjxraydb/zynq7/xc7z010clg400-1.json"
+  },
+  {
+   "name": "zynq7 (xc7z010clg400-2)",
+   "url": "data/prjxraydb/zynq7/xc7z010clg400-2.json"
+  },
+  {
+   "name": "zynq7 (xc7z010clg400-3)",
+   "url": "data/prjxraydb/zynq7/xc7z010clg400-3.json"
+  },
+  {
    "name": "zynq7 (xc7z020)",
    "url": "data/prjxraydb/zynq7/xc7z020.json"
+  },
+  {
+   "name": "zynq7 (xc7z020clg400-1)",
+   "url": "data/prjxraydb/zynq7/xc7z020clg400-1.json"
+  },
+  {
+   "name": "zynq7 (xc7z020clg400-2)",
+   "url": "data/prjxraydb/zynq7/xc7z020clg400-2.json"
+  },
+  {
+   "name": "zynq7 (xc7z020clg400-3)",
+   "url": "data/prjxraydb/zynq7/xc7z020clg400-3.json"
+  },
+  {
+   "name": "zynq7 (xc7z020clg484-1)",
+   "url": "data/prjxraydb/zynq7/xc7z020clg484-1.json"
+  },
+  {
+   "name": "zynq7 (xc7z020clg484-2)",
+   "url": "data/prjxraydb/zynq7/xc7z020clg484-2.json"
+  },
+  {
+   "name": "zynq7 (xc7z020clg484-3)",
+   "url": "data/prjxraydb/zynq7/xc7z020clg484-3.json"
   },
   {
    "name": "f4pga-arch-defs/ice40 (generated from arch.xml file)",
