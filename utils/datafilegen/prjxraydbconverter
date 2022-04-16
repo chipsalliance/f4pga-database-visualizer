@@ -3,6 +3,7 @@
 import argparse
 from datafile import *
 import json
+import yaml
 import sys
 import re
 from datetime import datetime
@@ -14,6 +15,18 @@ class PrjxrayDbConverter:
     def __init__(self, src):
         # Using abspath to avoid symlink resolving
         self.src = Path(os.path.abspath(src))
+        #Read parts.yaml file and get path
+        with open(self.src.parent/"mapping/parts.yaml", 'r') as f:  
+            data = yaml.safe_load(f)
+            if self.src.name in data:
+                device = data.get(self.src.name).get("device")
+            else:
+                device = self.src.name
+        #Read devices yaml and find fabric id
+        with open(self.src.parent/"mapping/devices.yaml", 'r') as f:  
+            data = yaml.safe_load(f)
+            fabric = data.get(device).get("fabric")    
+        self.src = self.src.parent.joinpath(fabric)
         if self.src.is_file():
             self.src = self.src.parent
         self.data_file = SdbvDataFile()
