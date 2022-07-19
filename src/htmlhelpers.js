@@ -1,3 +1,17 @@
+export class ButtonBuilder {
+    constructor(value) {
+        this.button = document.createElement("button");
+        this.button.textContent = value;
+    }
+
+    /**
+     * @returns {HTMLButtonElement}
+     */
+    build() {
+        return this.button;
+    }
+};
+
 export class DefinitionListBuilder {
     constructor(attrs={}) {
         this.dl = document.createElement("dl");

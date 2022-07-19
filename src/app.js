@@ -63,6 +63,7 @@ function renderDescription(containerNode, description) {
     if(!description)
         return;
     let dlBuilder = null;
+    let enteredSites = false;
 
     for (const entry of description) {
         if (entry instanceof Object) {
@@ -79,7 +80,12 @@ function renderDescription(containerNode, description) {
                 Object.entries(entry.value).forEach(([k, v])=>subDlBuilder.addEntry(k, v.toString()));
                 value = [subDlBuilder.build()];
             } else {
-                value = entry.value;
+                if (enteredSites) {
+                    let buttonBuilder = new HTMLHelpers.ButtonBuilder(entry.value.toString());
+                    value = buttonBuilder.build();
+                } else {
+                    value = entry.value;
+                }
             }
             dlBuilder.addEntry(entry.key, value);
         } else {
@@ -89,6 +95,11 @@ function renderDescription(containerNode, description) {
             }
             if (typeof entry == "string") {
                 if (entry.startsWith("# ")) {
+                    if (entry == "# Sites") {
+                        enteredSites = true;
+                    } else {
+                        enteredSites = false;
+                    }
                     let h = document.createElement("h4");
                     h.innerText = entry.substring(2).trim();
                     containerNode.appendChild(h);
