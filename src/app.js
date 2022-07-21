@@ -95,14 +95,17 @@ function renderDescription(containerNode, description) {
             }
             if (typeof entry == "string") {
                 if (entry.startsWith("# ")) {
-                    if (entry == "# Sites") {
-                        enteredSites = true;
-                    } else {
-                        enteredSites = false;
-                    }
                     let h = document.createElement("h4");
                     h.innerText = entry.substring(2).trim();
                     containerNode.appendChild(h);
+                    if (entry == "# Sites") {
+                        h.innerText =  'Sites' + ' ';
+                        let button = (new HTMLHelpers.ButtonBuilder("View Tile Subgrids")).build();
+                        button.addEventListener("click", this.openSubgridView)
+                        h.appendChild(button);
+                    }
+                    
+                    
                 } else {
                     let p = document.createElement("p");
                     p.innerText = entry.trim();
@@ -136,6 +139,11 @@ const openTileGridButton = {
         return this.node;
     }
 };
+
+//function openSubgridView() {
+    //write logic to read the dist/production/site_types.json 
+    //build svg rectanges for each site and append inputs, ouput pins 
+//}
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
     let databaseInfoElement = document.getElementById("database-info");

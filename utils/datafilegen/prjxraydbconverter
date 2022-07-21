@@ -9,12 +9,16 @@ import re
 from datetime import datetime
 import os
 from pathlib import Path
+import shutil
 
 
 class PrjxrayDbConverter:
     def __init__(self, src):
         # Using abspath to avoid symlink resolving
         self.src = Path(os.path.abspath(src))
+        self.src_oneup = self.src.parents[0]
+        print(src)
+
         #Read parts.yaml file and get path
         with open(self.src.parent/"mapping/parts.yaml", 'r') as f:  
             data = yaml.safe_load(f)
@@ -106,10 +110,24 @@ class PrjxrayDbConverter:
                 description.append({"Clock region": clock_region})
 
             sites = entries.get("sites", {})
+            sitearray =[]
             if len(sites) > 0:
                 description.append("# Sites")
                 for site_name, site_type in sites.items():
                     description.append({site_name: site_type})
+                    obj1 = None
+                    sitestr = "site_type_"+str(site_type)+'.json'
+                    
+                    sitesrc = str(self.src_oneup)+'/'+sitestr
+                    if site_type in sitearray:
+                        break
+                    else:
+                        shutil.copy2(sitesrc,'/Users/gsm/Documents/GitHub/f4pga-database-visualizer/dist/production/')
+                        sitearray.append(site_type)
+                    
+
+
+
 
             pin_functions = entries.get("pin_functions", {})
             if len(pin_functions) > 0:
