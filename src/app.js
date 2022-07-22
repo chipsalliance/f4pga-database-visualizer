@@ -19,6 +19,7 @@ import {GridModel, GridView} from "./components/grid-view/grid-view";
 
 
 var mdc_tab_bars = {}
+let sites = [];
 document.querySelectorAll('.mdc-tab-bar').forEach((el, _, __) => {
     const tabBar = new MDCTabBar(el);
 
@@ -64,7 +65,7 @@ function renderDescription(containerNode, description) {
         return;
     let dlBuilder = null;
     let enteredSites = false;
-
+    sites = [];
     for (const entry of description) {
         if (entry instanceof Object) {
             if (!dlBuilder) {
@@ -74,17 +75,21 @@ function renderDescription(containerNode, description) {
             if (entry.value instanceof Array) {
                 let listBuilder = new HTMLHelpers.ListBuilder("ul");
                 entry.value.forEach((vv)=>listBuilder.addEntry(vv.toString(10)));
+                if (enteredSites) {
+                    entry.value.forEach((vv)=>sites.push(vv.toString(10)));
+                }
                 value = [listBuilder.build()];
             } else if (entry.value instanceof Object) {
                 let subDlBuilder = new HTMLHelpers.DefinitionListBuilder();
                 Object.entries(entry.value).forEach(([k, v])=>subDlBuilder.addEntry(k, v.toString()));
-                value = [subDlBuilder.build()];
-            } else {
                 if (enteredSites) {
-                    let buttonBuilder = new HTMLHelpers.ButtonBuilder(entry.value.toString());
-                    value = buttonBuilder.build();
-                } else {
-                    value = entry.value;
+                    Object.entries(entry.value).forEach(([k, v])=>sites.push(k, v.toString()));
+                }
+                value = [subDlBuilder.build()];
+            } else {            
+                value = entry.value;
+                if (enteredSites) {
+                    sites.push(value);
                 }
             }
             dlBuilder.addEntry(entry.key, value);
@@ -99,12 +104,13 @@ function renderDescription(containerNode, description) {
                     h.innerText = entry.substring(2).trim();
                     containerNode.appendChild(h);
                     if (entry == "# Sites") {
+                        enteredSites = true;
                         h.innerText =  'Sites' + ' ';
-                        let button = (new HTMLHelpers.ButtonBuilder("View Tile Subgrids")).build();
-                        button.addEventListener("click", this.openSubgridView)
+                        let button = new HTMLHelpers.ButtonBuilder("View Sites", openSiteView).build();
                         h.appendChild(button);
+                    } else {
+                        enteredSites = false;
                     }
-                    
                     
                 } else {
                     let p = document.createElement("p");
@@ -140,10 +146,13 @@ const openTileGridButton = {
     }
 };
 
-//function openSubgridView() {
-    //write logic to read the dist/production/site_types.json 
-    //build svg rectanges for each site and append inputs, ouput pins 
-//}
+function openSiteView() {
+    
+    sites.forEach((site)=> {
+        //write logic to read the dist/production/site_types.json 
+        //build svg rectanges for each site and append inputs, ouput pins
+    })
+}
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
     let databaseInfoElement = document.getElementById("database-info");

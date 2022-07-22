@@ -1,8 +1,8 @@
 export class ButtonBuilder {
-    constructor(value) {
+    constructor(value, clickHandler) {
         this.button = document.createElement("button");
         this.button.textContent = value;
-        this.button.addEventListener("click", this.clickHandler);
+        this.button.addEventListener("click", clickHandler);
     }
 
     /**
@@ -10,10 +10,6 @@ export class ButtonBuilder {
      */
     build() {
         return this.button;
-    }
-
-    clickHandler () {
-        window.location.href = ("http://localhost:8080");
     }
 };
 

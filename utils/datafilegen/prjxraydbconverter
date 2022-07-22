@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import site
 from datafile import *
 import json
 import yaml
@@ -34,6 +35,7 @@ class PrjxrayDbConverter:
         if self.src.is_file():
             self.src = self.src.parent
         self.data_file = SdbvDataFile()
+        self.site_files_array = []
 
 
     @staticmethod
@@ -110,20 +112,16 @@ class PrjxrayDbConverter:
                 description.append({"Clock region": clock_region})
 
             sites = entries.get("sites", {})
-            sitearray =[]
             if len(sites) > 0:
                 description.append("# Sites")
                 for site_name, site_type in sites.items():
                     description.append({site_name: site_type})
-                    obj1 = None
-                    sitestr = "site_type_"+str(site_type)+'.json'
-                    
-                    sitesrc = str(self.src_oneup)+'/'+sitestr
-                    if site_type in sitearray:
+                    site_file_name = "site_type_"+str(site_type)+'.json'
+                    site_file_path = str(self.src_oneup)+'/'+site_file_name
+                    if site_file_path in self.site_files_array:
                         break
                     else:
-                        shutil.copy2(sitesrc,'/Users/gsm/Documents/GitHub/f4pga-database-visualizer/dist/production/')
-                        sitearray.append(site_type)
+                        self.site_files_array.append(site_file_path)
                     
 
 
@@ -198,6 +196,8 @@ def run(src, out, readable_output=False):
         grid.cells.data = SdbvImport(grid_file_name, grid.cells.data)
 
     out.parent.mkdir(parents=True, exist_ok=True)
+    for site_file in converter.site_files_array:
+        shutil.copy2(site_file, out.parent)
     return data_file.writeFiles(out.name, out.parent, minimalOutput=(not readable_output))
 
 
