@@ -16,9 +16,13 @@ import DataFilesListScreen from "./views/data-files-list-screen";
 import {elementFromHtml} from "./utils/element-from-html";
 
 import {GridModel, GridView} from "./components/grid-view/grid-view";
+import {getInPin, getOutPin, getRectangle} from "./svg/site_elements"
 
 
 var mdc_tab_bars = {}
+let sites = [];
+let button;
+let tileView;
 document.querySelectorAll('.mdc-tab-bar').forEach((el, _, __) => {
     const tabBar = new MDCTabBar(el);
 
@@ -63,7 +67,8 @@ function renderDescription(containerNode, description) {
     if(!description)
         return;
     let dlBuilder = null;
-
+    let enteredSites = false;
+    sites = [];
     for (const entry of description) {
         if (entry instanceof Object) {
             if (!dlBuilder) {
@@ -73,13 +78,22 @@ function renderDescription(containerNode, description) {
             if (entry.value instanceof Array) {
                 let listBuilder = new HTMLHelpers.ListBuilder("ul");
                 entry.value.forEach((vv)=>listBuilder.addEntry(vv.toString(10)));
+                if (enteredSites) {
+                    entry.value.forEach((vv)=>sites.push(vv.toString(10)));
+                }
                 value = [listBuilder.build()];
             } else if (entry.value instanceof Object) {
                 let subDlBuilder = new HTMLHelpers.DefinitionListBuilder();
                 Object.entries(entry.value).forEach(([k, v])=>subDlBuilder.addEntry(k, v.toString()));
+                if (enteredSites) {
+                    Object.entries(entry.value).forEach(([k, v])=>sites.push(k, v.toString()));
+                }
                 value = [subDlBuilder.build()];
-            } else {
+            } else {            
                 value = entry.value;
+                if (enteredSites) {
+                    sites.push(value);
+                }
             }
             dlBuilder.addEntry(entry.key, value);
         } else {
@@ -92,6 +106,15 @@ function renderDescription(containerNode, description) {
                     let h = document.createElement("h4");
                     h.innerText = entry.substring(2).trim();
                     containerNode.appendChild(h);
+                    if (entry == "# Sites") {
+                        enteredSites = true;
+                        h.innerText =  'Sites' + ' ';
+                        button = new HTMLHelpers.ButtonBuilder("View Sites", openSiteView).build();
+                        h.appendChild(button);
+                    } else {
+                        enteredSites = false;
+                    }
+                    
                 } else {
                     let p = document.createElement("p");
                     p.innerText = entry.trim();
@@ -125,6 +148,59 @@ const openTileGridButton = {
         return this.node;
     }
 };
+
+async function openSiteView() {
+    
+    let listBuilder = new HTMLHelpers.ListBuilder("ul", {}, "display: flex; list-style-type: none");
+    sites.forEach((site_file)=> {
+        //write logic to read the dist/production/site_types.json 
+        //build svg rectanges for each site and append inputs, ouput pins
+        const site_file_url = new URL("site_type_"+site_file+".json", window.location);
+        const site_data = new JsonReader(site_file_url, {readFile: readFileXHR});
+        Promise.resolve(site_data.get("site_pins", false)).then((value)=>{
+            const entries = Object.entries(value);
+            if (entries.length > 0) {
+                let pinInListBuilder = new HTMLHelpers.ListBuilder('ul', {}, "list-style-type: none;padding-inline-start: 0px;");
+                let pinOutListBuilder = new HTMLHelpers.ListBuilder('ul', {}, "list-style-type: none;padding-inline-start: 0px;");
+                let in_pins_size = 0;
+                let out_pins_size = 0;
+                entries.forEach((k) => {
+                    if (k[1].direction == "IN") {
+                        in_pins_size++;
+                        pinInListBuilder.addEntry(getInPin(k[0]));
+                    } else {
+                        out_pins_size++;
+                        pinOutListBuilder.addEntry(getOutPin(k[0]));
+                    }
+                });
+                let pin_size = 1;
+                if (in_pins_size > out_pins_size) {
+                    pin_size = in_pins_size;
+                } else {
+                    pin_size = out_pins_size;
+                }
+                
+                let site_element = elementFromHtml(`<div style="display: flex; padding-right: 50px; padding-left: 50px"><div>`);
+                site_element.appendChild(pinInListBuilder.build());
+                site_element.appendChild(getRectangle(pin_size * 30, 200, site_file));
+                site_element.appendChild(pinOutListBuilder.build());
+                listBuilder.addEntry(site_element);
+            }
+            
+        });
+    })
+    document.getElementsByClassName("grid-view")[0].innerHTML = "";
+    document.getElementsByClassName("grid-view")[0].appendChild(listBuilder.build());
+    if (button instanceof HTMLButtonElement) {
+        button.textContent = "Go back to Tile view";
+        button.removeEventListener("click", openSiteView);
+        button.addEventListener("click", goBackToTileView);
+    }
+}
+
+function goBackToTileView() {
+    window.location.reload();
+}
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
     let databaseInfoElement = document.getElementById("database-info");
