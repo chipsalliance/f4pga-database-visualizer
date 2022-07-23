@@ -16,10 +16,13 @@ import DataFilesListScreen from "./views/data-files-list-screen";
 import {elementFromHtml} from "./utils/element-from-html";
 
 import {GridModel, GridView} from "./components/grid-view/grid-view";
+import {getInPin, getOutPin, getRectangle} from "./svg/site_elements"
 
 
 var mdc_tab_bars = {}
 let sites = [];
+let button;
+let tileView;
 document.querySelectorAll('.mdc-tab-bar').forEach((el, _, __) => {
     const tabBar = new MDCTabBar(el);
 
@@ -106,7 +109,7 @@ function renderDescription(containerNode, description) {
                     if (entry == "# Sites") {
                         enteredSites = true;
                         h.innerText =  'Sites' + ' ';
-                        let button = new HTMLHelpers.ButtonBuilder("View Sites", openSiteView).build();
+                        button = new HTMLHelpers.ButtonBuilder("View Sites", openSiteView).build();
                         h.appendChild(button);
                     } else {
                         enteredSites = false;
@@ -146,12 +149,57 @@ const openTileGridButton = {
     }
 };
 
-function openSiteView() {
+async function openSiteView() {
     
-    sites.forEach((site)=> {
+    let listBuilder = new HTMLHelpers.ListBuilder("ul", {}, "display: flex; list-style-type: none");
+    sites.forEach((site_file)=> {
         //write logic to read the dist/production/site_types.json 
         //build svg rectanges for each site and append inputs, ouput pins
+        const site_file_url = new URL("site_type_"+site_file+".json", window.location);
+        const site_data = new JsonReader(site_file_url, {readFile: readFileXHR});
+        Promise.resolve(site_data.get("site_pins", false)).then((value)=>{
+            const entries = Object.entries(value);
+            if (entries.length > 0) {
+                let pinInListBuilder = new HTMLHelpers.ListBuilder('ul', {}, "list-style-type: none;padding-inline-start: 0px;");
+                let pinOutListBuilder = new HTMLHelpers.ListBuilder('ul', {}, "list-style-type: none;padding-inline-start: 0px;");
+                let in_pins_size = 0;
+                let out_pins_size = 0;
+                entries.forEach((k) => {
+                    if (k[1].direction == "IN") {
+                        in_pins_size++;
+                        pinInListBuilder.addEntry(getInPin(k[0]));
+                    } else {
+                        out_pins_size++;
+                        pinOutListBuilder.addEntry(getOutPin(k[0]));
+                    }
+                });
+                let pin_size = 1;
+                if (in_pins_size > out_pins_size) {
+                    pin_size = in_pins_size;
+                } else {
+                    pin_size = out_pins_size;
+                }
+                
+                let site_element = elementFromHtml(`<div style="display: flex; padding-right: 50px; padding-left: 50px"><div>`);
+                site_element.appendChild(pinInListBuilder.build());
+                site_element.appendChild(getRectangle(pin_size * 30, 200, site_file));
+                site_element.appendChild(pinOutListBuilder.build());
+                listBuilder.addEntry(site_element);
+            }
+            
+        });
     })
+    document.getElementsByClassName("grid-view")[0].innerHTML = "";
+    document.getElementsByClassName("grid-view")[0].appendChild(listBuilder.build());
+    if (button instanceof HTMLButtonElement) {
+        button.textContent = "Go back to Tile view";
+        button.removeEventListener("click", openSiteView);
+        button.addEventListener("click", goBackToTileView);
+    }
+}
+
+function goBackToTileView() {
+    window.location.reload();
 }
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {

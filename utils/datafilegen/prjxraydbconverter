@@ -196,6 +196,7 @@ def run(src, out, readable_output=False):
         grid.cells.data = SdbvImport(grid_file_name, grid.cells.data)
 
     out.parent.mkdir(parents=True, exist_ok=True)
+    #TODO - identify the right folder structure for saving site type json files
     for site_file in converter.site_files_array:
         shutil.copy2(site_file, out.parent)
     return data_file.writeFiles(out.name, out.parent, minimalOutput=(not readable_output))

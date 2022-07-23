@@ -11,6 +11,14 @@ export class ButtonBuilder {
     build() {
         return this.button;
     }
+
+    setButtonDisplayText(value) {
+        this.button.textContent = value;
+    }
+
+    setEventlistener(clickHandler) {
+        this.button.addEventListener("click", clickHandler)
+    }
 };
 
 export class DefinitionListBuilder {
@@ -56,10 +64,13 @@ export class ListBuilder {
     /**
      * @param {"ul"|"ol"} tagName
      */
-    constructor(tagName="ul", attrs={}) {
+    constructor(tagName="ul", attrs={}, style="") {
         this.l = document.createElement(tagName);
         for (const [attr, value] of Object.entries(attrs)) {
             this.l.setAttribute(attr, value);
+        }
+        if (style !== "" ) {
+            this.l.style = style;
         }
     }
 
@@ -70,7 +81,7 @@ export class ListBuilder {
         let li = document.createElement("li");
         if (value instanceof Array)
             value.forEach((el) => li.appendChild(el));
-        else if (value instanceof HTMLElement)
+        else if (value instanceof HTMLElement || value instanceof Node)
             li.appendChild(value);
         else
             li.innerText = value;
