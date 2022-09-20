@@ -80,8 +80,8 @@ class SdbvGridCells:
 class SdbvGrid:
     def __init__(self):
         self.name = None
-        self.colsRange = [0, 0]
-        self.rowsRange = [0, 0]
+        self.colsRange = [[0, 0]]
+        self.rowsRange = [[0, 0]]
         self.rowHeaders = None
         self.colHeaders = None
         self.cells = SdbvGridCells()

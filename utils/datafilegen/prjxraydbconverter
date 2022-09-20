@@ -132,8 +132,8 @@ class PrjxrayDbConverter:
 
             grid.cells.addCell(cell)
 
-        grid.colsRange = cols_range
-        grid.rowsRange = rows_range
+        grid.colsRange = [cols_range]
+        grid.rowsRange = [rows_range]
 
         self.data_file.grids[""] = grid
 

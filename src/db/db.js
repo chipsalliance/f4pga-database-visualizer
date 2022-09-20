@@ -581,22 +581,44 @@ class Grid {
         }
         const processIfArray = (v, out) => {
             if (matchType(v, {is: Array})) {
-                if (!processIfNumber(v[0], out)) {
-                    throw new Error(v[0], "Invalid value.");
-                }
-                if (!(matchType(v[1], {is: undefined}) || processIfNumber(v[1], out))) {
-                    this.warningCallback(v[1], "Invalid value.");
-                }
+                let range = [];
                 if (v.length > 2) {
                     this.warningCallback(v, "Too much values in an array. Expected 1 or 2.");
+                }
+                if (!processIfNumber(v[0], range)) {
+                    throw new Error(v[0], "Invalid range start.");
+                }
+                if (!processIfNumber(v[1], range)) {
+                    throw new Error(v[1], "Invalid range end.");
+                }
+                for(let i = range[0]; i <= range[1]; i++) {
+                    out.push(i);
                 }
                 return true;
             }
         }
 
         let result = [];
-        if (!(processIfNumber(value, result) || processIfArray(value, result))) {
-            throw new Error("Invalid or missing value.");
+        try {
+            if (matchType(value, {is: Array})) {
+                value.forEach((v) => {
+                    if (!(processIfNumber(v, result) || processIfArray(v, result))) {
+                        throw new Error("Invalid or missing value.");
+                    }
+                });
+                return result;
+            } else if (!processIfNumber(value, result)){
+                throw new Error("Invalid or missing value.");
+            }
+        }
+        catch (e) { // It is possible that given path was incorrect, remove `Range` suffix if present and try again
+            let prefix = path.split("Range")[0];
+            if (prefix != path && (prefix == "rows" || prefix == "cols")) {
+                path = prefix;
+                return this._getRange(path);
+            } else {
+                throw e;
+            }
         }
 
         return new Range(...result);
