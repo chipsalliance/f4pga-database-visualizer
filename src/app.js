@@ -80,7 +80,7 @@ function renderDescription(containerNode, description) {
                 value = [subDlBuilder.build()];
             } else {
                 value = entry.value;
-                keys.push(entry.key); 
+                keys.push(entry.key);
             }
             dlBuilder.addEntry(entry.key, value);
         } else {
@@ -108,8 +108,8 @@ function renderDescription(containerNode, description) {
     }
 
     //removing two initial entries in array i.e. 'Grid position' and/or 'Clock region'
-    keys.shift();keys.shift(); 
-    
+    keys.shift();keys.shift();
+
     const cont = document.getElementById("showTileDetails");
     cont.innerText = "";
     if(!keys.length){
@@ -172,11 +172,23 @@ const openTileGridButton = {
 };
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
+    if(gridsList.length <= 1){
+        let x = document.getElementById("side-panel-tab-bar");
+        x.setAttribute('style','display:none');
+        
+        x = document.getElementById("side-panel-database-tab");
+        x.setAttribute('style','display:none');
+
+        const displayTextDatabaseInfo = [`Name : ${name}`,`Build date : ${buildDate.toLocaleString()}`];
+        x = document.getElementById("databaseInfo");
+        x.setAttribute('title',displayTextDatabaseInfo);
+    }
+    
     let databaseInfoElement = document.getElementById("database-info");
     databaseInfoElement.innerHTML = "";
 
     let h;
-
+    
     // Title
     if (name) {
         h = document.createElement("h3");
