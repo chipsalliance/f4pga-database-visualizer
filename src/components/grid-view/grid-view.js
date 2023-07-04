@@ -300,6 +300,12 @@ export class GridView extends Component {
         gridElement.classList.add("grid-view__grid");
 
         element.appendChild(gridElement);
+
+        const newdiv = document.createElement("div");
+        newdiv.setAttribute('id',"showTileDetails");
+        newdiv.className = "tileDetails";
+        element.appendChild(newdiv);
+        
         element.appendChild(this._minimap.build());
         this._gridElement = gridElement;
 
