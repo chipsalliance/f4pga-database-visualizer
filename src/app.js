@@ -63,7 +63,7 @@ function renderDescription(containerNode, description) {
     if(!description)
         return;
     let dlBuilder = null;
-
+    let keys = [];
     for (const entry of description) {
         if (entry instanceof Object) {
             if (!dlBuilder) {
@@ -74,15 +74,20 @@ function renderDescription(containerNode, description) {
                 let listBuilder = new HTMLHelpers.ListBuilder("ul");
                 entry.value.forEach((vv)=>listBuilder.addEntry(vv.toString(10)));
                 value = [listBuilder.build()];
-            } else if (entry.value instanceof Object) {
+            } 
+            else if (entry.value instanceof Object) {  
                 let subDlBuilder = new HTMLHelpers.DefinitionListBuilder();
                 Object.entries(entry.value).forEach(([k, v])=>subDlBuilder.addEntry(k, v.toString()));
                 value = [subDlBuilder.build()];
-            } else {
+            } 
+            else {
                 value = entry.value;
+                // entry.key ko pakadna hai 
+                keys.push(entry.key); //changes
             }
             dlBuilder.addEntry(entry.key, value);
-        } else {
+        } 
+        else {
             if (dlBuilder) {
                 containerNode.appendChild(dlBuilder.build());
                 dlBuilder = null;
@@ -104,6 +109,51 @@ function renderDescription(containerNode, description) {
     }
     if (dlBuilder) {
         containerNode.appendChild(dlBuilder.build());
+    }
+
+    keys.shift();keys.shift();
+
+    const cont = document.getElementById("showTileDetails");
+    cont.innerText = "";
+    if(!keys.length){
+        cont.style.display = "none";
+    }
+    else{
+        cont.style.display = "block";
+    }
+    
+    for (let x of keys) {
+        let s = document.createElement("div");
+        s.innerText = x;
+        s.className = "indivTile";
+        cont.appendChild(s);
+        s.addEventListener('click', function details() {
+            let v = document.getElementById("item-info");
+
+            let details = document.createElement("div");
+
+            let head = document.createElement("h4");
+            head.innerText = `Inner Details of ${x}`;
+
+            let tilesSet = document.createElement("div");
+            tilesSet.className = "tiles";
+            for(let no = 1 ; no <= 3 ; no++){
+                let i = document.createElement("span");
+                i.innerText = `Component ${no}`;
+                tilesSet.appendChild(i);
+            }
+
+            details.appendChild(head);
+            details.appendChild(tilesSet);
+
+            v.appendChild(details);
+
+            const myTimeout = setTimeout(function clearDetails() {
+                details.innerHTML = "";
+            }, 2500);
+        });
+        
+
     }
 }
 
@@ -127,11 +177,22 @@ const openTileGridButton = {
 };
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
+    if(gridsList.length <= 1){
+        let x = document.getElementById("side-panel-tab-bar");
+        x.setAttribute('style','display:none');
+        
+        const displayTextDatabaseInfo = [`Name : ${name}`,`Build date : ${buildDate.toLocaleString()}`];
+        x = document.getElementById("databaseInfo");
+        x.setAttribute('title',displayTextDatabaseInfo);
+
+        x = document.getElementById("side-panel-database-tab");
+        x.setAttribute('style','display:none');
+        
+    }
+    // else{
     let databaseInfoElement = document.getElementById("database-info");
     databaseInfoElement.innerHTML = "";
-
     let h;
-
     // Title
     if (name) {
         h = document.createElement("h3");
@@ -143,7 +204,7 @@ function updateDatabaseInfoView(name, description, version, buildDate, buildSour
     if (description) {
         renderDescription(databaseInfoElement, description);
     }
-
+    
     // Available grids
     if (gridsList.length > 1) {
         h = document.createElement("h3");
@@ -446,3 +507,4 @@ async function loadData() {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => loadData());
+

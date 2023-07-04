@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title></title>
-    <% for (var css in htmlWebpackPlugin.files.css) {
+    <% for (var css in htmlWebpackPlugin.files.css) { 
         %><link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet"><%
     } %>
 </head>
@@ -11,9 +11,14 @@
 <div id="grid-view-app">
     <header id="header">
         <h1><a id="header-db-name"></a></h1>
+        <div>
+            <h1 id="toggleMinimap" class="buttonStyle">Toggle MiniMap</h1>
+            <h1 id="toggleDetails" class="buttonStyle">Toggle Details</h1>
+            <h1 id="databaseInfo" class="buttonStyle" title="">Database</h1>
+        </div>
     </header>
-    <div id="side-header">
-        <h2>Details</h2>
+    <div id="grid-view">
+        <div id="grid-view-grid"></div>
     </div>
     <div id="side-panel">
         <div id="side-panel-tab-bar" class="mdc-tab-bar" role="tablist"><div class="mdc-tab-scroller">
@@ -38,8 +43,10 @@
                     </span>
                     <span class="mdc-tab__ripple"></span>
                 </button>
-            </div></div>
-        </div></div>
+            </div>
+        </div>
+        </div>
+    </div>
         <div class="side-panel-content tab-view">
             <div class="tab-view-page" id="side-panel-tile-tab" role="tabpanel">
                 <div id="item-info" class="tab-view-page-content">
@@ -47,17 +54,38 @@
                 </div>
             </div>
             <div class="tab-view-page" id="side-panel-database-tab" role="tabpanel">
-                <div id="database-info" class="tab-view-page-content">
-                </div>
+                <div id="database-info" class="tab-view-page-content"></div>
             </div>
+            
         </div>
     </div>
-    <div id="grid-view">
-        <div id="grid-view-grid"></div>
-    </div>
+    
 </div>
 <% for (var js in htmlWebpackPlugin.files.js) {
 %><script src="<%= htmlWebpackPlugin.files.js[js] %>"></script><%
 } %>
+<script>
+    let buttonToggleMinimap = document.getElementById('toggleMinimap');
+    buttonToggleMinimap.addEventListener('click', function toggleminimap() {
+        let map = document.querySelector(".minimap");
+        if(map.style.display === 'block'){
+            map.style.display = 'none';
+        }
+        else{
+            map.style.display = 'block';
+        }
+    });
+
+    let buttonToggleDetails = document.getElementById('toggleDetails');
+    buttonToggleDetails.addEventListener('click', function toggledetails() {
+        let mainDetails = document.getElementById("side-panel");
+        if(mainDetails.style.display === 'flex'){
+            mainDetails.style.display = 'none';
+        }
+        else{
+            mainDetails.style.display = 'flex';
+        }
+    });
+</script>
 </body>
 </html>
