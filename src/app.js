@@ -145,9 +145,9 @@ function renderDescription(containerNode, description) {
 
             v.appendChild(details);
 
-            const myTimeout = setTimeout(function clearDetails() {
-                details.innerHTML = "";
-            }, 2500);
+            // const myTimeout = setTimeout(function clearDetails() {
+            //     details.innerHTML = "";
+            // }, 2500);
         });
     }
 }
