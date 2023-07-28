@@ -11,17 +11,17 @@
 <div id="grid-view-app">
     <header id="header">
         <h1><a id="header-db-name"></a></h1>
-        <div>
+        <section>
             <h1 id="toggleMinimap" class="buttonStyle">Toggle MiniMap</h1>
             <h1 id="toggleDetails" class="buttonStyle">Toggle Details</h1>
             <h1 id="databaseInfo" class="buttonStyle" title="">Database</h1>
-        </div>
+        </section>
     </header>
-    <div id="grid-view">
+    <aside id="grid-view">
         <div id="grid-view-grid"></div>
-    </div>
-    <div id="side-panel">
-        <div id="side-panel-tab-bar" class="mdc-tab-bar" role="tablist"><div class="mdc-tab-scroller">
+    </aside>
+    <section id="side-panel">
+        <details id="side-panel-tab-bar" class="mdc-tab-bar" role="tablist"><div class="mdc-tab-scroller">
             <div class="mdc-tab-scroller__scroll-area"><div class="mdc-tab-scroller__scroll-content">
                 <button class="mdc-tab" role="tab" aria-selected="false" tabindex="1" aria-controls="side-panel-tile-tab">
                     <span class="mdc-tab__content">
@@ -46,7 +46,7 @@
             </div>
         </div>
         </div>
-    </div>
+    </details>
         <div class="side-panel-content tab-view">
             <div class="tab-view-page" id="side-panel-tile-tab" role="tabpanel">
                 <div id="item-info" class="tab-view-page-content">
@@ -58,7 +58,7 @@
             </div>
             
         </div>
-    </div>
+    </section>
     
 </div>
 <% for (var js in htmlWebpackPlugin.files.js) {
