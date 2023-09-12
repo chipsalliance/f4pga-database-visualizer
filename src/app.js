@@ -63,7 +63,7 @@ function renderDescription(containerNode, description) {
     if(!description)
         return;
     let dlBuilder = null;
-
+    const keys = [];
     for (const entry of description) {
         if (entry instanceof Object) {
             if (!dlBuilder) {
@@ -80,6 +80,7 @@ function renderDescription(containerNode, description) {
                 value = [subDlBuilder.build()];
             } else {
                 value = entry.value;
+                keys.push(entry.key);
             }
             dlBuilder.addEntry(entry.key, value);
         } else {
@@ -105,6 +106,46 @@ function renderDescription(containerNode, description) {
     if (dlBuilder) {
         containerNode.appendChild(dlBuilder.build());
     }
+
+    //removing two initial entries in array i.e. 'Grid position' and/or 'Clock region'
+    keys.shift();keys.shift();
+
+    const cont = document.getElementById("showTileDetails");
+    cont.innerText = "";
+    if(!keys.length){
+        cont.style.display = "none";
+    }
+    else{
+        cont.style.display = "block";
+    }
+    
+    for (let x of keys) {
+        let s = document.createElement("div");
+        s.innerText = x;
+        s.className = "indivTile";
+        cont.appendChild(s);
+        s.addEventListener('click', function details() {
+            let v = document.getElementById("item-info");
+
+            let details = document.createElement("div");
+
+            let head = document.createElement("h4");
+            head.innerText = `Inner Details of ${x}`;
+
+            let tilesSet = document.createElement("div");
+            tilesSet.className = "tiles";
+            for(let no = 1 ; no <= 3 ; no++){
+                let i = document.createElement("span");
+                i.innerText = `Component ${no}`;
+                tilesSet.appendChild(i);
+            }
+
+            details.appendChild(head);
+            details.appendChild(tilesSet);
+
+            v.appendChild(details);
+        });
+    }
 }
 
 const openTileGridButton = {
@@ -127,11 +168,23 @@ const openTileGridButton = {
 };
 
 function updateDatabaseInfoView(name, description, version, buildDate, buildSources, gridsList) {
+    if(gridsList.length <= 1){
+        let x = document.getElementById("side-panel-tab-bar");
+        x.setAttribute('style','display:none');
+        
+        x = document.getElementById("side-panel-database-tab");
+        x.setAttribute('style','display:none');
+
+        const displayTextDatabaseInfo = [`Name : ${name}`,`Build date : ${buildDate.toLocaleString()}`];
+        x = document.getElementById("databaseInfo");
+        x.setAttribute('title',displayTextDatabaseInfo);
+    }
+    
     let databaseInfoElement = document.getElementById("database-info");
     databaseInfoElement.innerHTML = "";
 
     let h;
-
+    
     // Title
     if (name) {
         h = document.createElement("h3");
