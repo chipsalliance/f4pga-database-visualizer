@@ -127,9 +127,7 @@ body {
 
     display: grid;
     grid-template:
-        "header side-header" 48px
-        "grid-view side-panel" calc(100vh - 48px) //minmax(0, 1fr)
-        / calc(100vw - 320px) 320px; //1fr 320px;
+        "header header" "side-panel side-panel" "grid-view grid-view";
 
     %app-header {
         background-color: white;
@@ -158,6 +156,46 @@ body {
 
         line-height: 1em;
 
+        div{
+            padding: 10px 0;
+            width: 400px ;
+
+            #databaseInfo:before {
+                position: absolute;
+                z-index: 2;
+                display: none;
+                width: 250px;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                content: attr(title);
+                top: calc(100% + 5px);
+                left: 15%;
+                transform: translateX(-50%);
+            }
+            
+            #databaseInfo:hover:before{
+                display: inline-block;
+            }
+        }
+        .buttonStyle {
+            border:1px solid #2196f3;
+            border-radius: 10px;
+            background-color:#e6e6e6 ;
+            height: 25px;
+            width: 150px;
+            text-align: center;
+            padding: 6px 6px;
+            margin: 6px 10px;
+            display:inline-block;
+            position: relative;
+        }
+        .buttonStyle:hover{
+            color: white;
+            background-color:#3f51b5;
+            cursor: pointer;
+        }
         h1 {
             font-size: 18px;
             font-weight: 700;
@@ -253,12 +291,52 @@ body {
             }
         }
     }
+    .tiles{
+      border: 1px solid #3f51b5;
+      display: flex;
+      flex-direction: column;
+      padding: 1%;
+      align-items: center;
+      height: fit-content;
+      justify-content: space-between;
+      span{
+        width: fit-content;
+        height: fit-content;
+        margin: 1%;
+        background-color: #3f51b5;
+        color: white;
+        padding: 1%;
+        border-radius: 4px;
+      }
+    }
+    .tileDetails{
+        padding: 4px;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+        background-color: white;
+        border-radius: 4px;
+        height: fit-content;
+        width: fit-content;
+        font-size: 3ex;
+        font-weight: bold;
+        color: #3f51b5;
+        place-self: start;
+        right: 1px;
+        top: 21px;
+        margin: 4px;
+        position: sticky;
+        display: none;
+    }
+    .indivTile:hover{
+        background-color: #3f51b5;
+        color: white;
+        cursor: pointer;
+    }   
     #side-panel {
         grid-area: side-panel;
         background-color: white;
         border-left: 1px solid $divider-color;
 
-        display: flex;
+        display: none;
         flex-direction: column;
         align-items: stretch;
         min-width: 320px;
