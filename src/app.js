@@ -144,10 +144,6 @@ function renderDescription(containerNode, description) {
             details.appendChild(tilesSet);
 
             v.appendChild(details);
-
-            const myTimeout = setTimeout(function clearDetails() {
-                details.innerHTML = "";
-            }, 2500);
         });
     }
 }
